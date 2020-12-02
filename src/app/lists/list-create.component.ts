@@ -3,7 +3,8 @@ import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-list-create',
-    templateUrl: './list-create.component.html'
+    templateUrl: './list-create.component.html',
+    styleUrls: ['./list-create.component.css',]
 })
 export class ListCreateComponent {
 
