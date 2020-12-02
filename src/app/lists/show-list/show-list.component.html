@@ -1,8 +1,10 @@
-<mat-accordion>
-    <mat-expansion-panel>
+<mat-accordion multi="true" *ngIf="lists.length > 0">
+    <mat-expansion-panel *ngFor="let list of lists">
         <mat-expansion-panel-header>
-            course list 1
+            {{ list.name }}
         </mat-expansion-panel-header>
-        <p>specific courses</p>
+        <p>{{ list.description }}</p>
     </mat-expansion-panel>
 </mat-accordion>
+
+<p class="info-text mat-body-1" *ngIf="lists.length <= 0 "> No Course List Created Yet ! </p>
