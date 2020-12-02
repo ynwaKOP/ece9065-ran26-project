@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class ListCreateComponent {
 
+    enteredValue = '';
+    newList = 'no content';
+
+    onAddList() {
+        
+        this.newList = this.enteredValue;
+    }
 }
