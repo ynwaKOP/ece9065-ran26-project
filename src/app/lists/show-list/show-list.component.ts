@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { List } from '../list.model';
 
 @Component({
     selector: 'app-show-list',
@@ -14,5 +15,5 @@ export class ShowListComponent {
         {name: "my list 444", description:'', pairs:[]}
     ]*/
 
-    lists = [];
+    @Input() lists: List[] = [];
 }

@@ -1,11 +1,20 @@
 <mat-card>
-    <mat-form-field>
-        <textarea matInput name="" id="" rows="1" [(ngModel)]="enteredValue"></textarea>
+    <form (submit)="onAddList(listForm)" #listForm="ngForm">
+        <mat-form-field>
+            <input matInput type="text" name="name" ngModel required #name="ngModel">
+            <mat-error *ngIf="name.invalid">  course list name is unique and required.  </mat-error>
+        </mat-form-field>
+        <mat-form-field >
+            <textarea matInput id="" rows="3" 
+            name="description" ngModel></textarea>
+        </mat-form-field>
         
-    </mat-form-field>
-    <button mat-raised-button 
-            color='primary'
-            (click)="onAddList()">create list</button>
+        <button mat-raised-button 
+                color='primary'
+                type="submit">Save List</button>
+
+    </form>
+
 </mat-card>
 
 
