@@ -1,10 +1,36 @@
-<mat-accordion multi="true" *ngIf="lists.length > 0">
-    <mat-expansion-panel *ngFor="let list of lists">
-        <mat-expansion-panel-header>
-            {{ list.name }}
-        </mat-expansion-panel-header>
-        <p>{{ list.description }}</p>
-    </mat-expansion-panel>
-</mat-accordion>
 
 <p class="info-text mat-body-1" *ngIf="lists.length <= 0 "> No Course List Created Yet ! </p>
+
+
+<h2>My Lists</h2>
+<ul class="lists">
+  <li *ngFor="let list of lists"
+    [class.selected]="list === selectedList"
+    (click)="onSelectedList(list)">
+    <span class="listname"> {{ list.name }} </span> 
+  </li>
+</ul>
+
+<div *ngIf="selectedList">
+
+  <h2>{{selectedList.name | uppercase}} Timetable</h2>
+
+  <form (submit)="onAddIntoList(addForm)" #addForm="ngForm">
+    <mat-form-field>
+        <input matInput type="text" name="subject" placeholder="Enter subjet" ngModel required #subject="ngModel">
+        <mat-error *ngIf="subject.invalid">  subject is required.  </mat-error>
+    </mat-form-field>
+    <mat-form-field >
+        <input matInput type="text" name="code" placeholder="Enter code" ngModel required #code="ngModel">
+        <mat-error *ngIf="code.invalid">  code is required.  </mat-error>
+    </mat-form-field>
+    
+    <button mat-raised-button 
+            color='accent'
+            type="submit">Add Into The List</button>
+
+</form>
+
+</div>
+
+

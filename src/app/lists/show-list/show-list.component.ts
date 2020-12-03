@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { List } from '../list.model';
+import { Pair } from '../pair.model';
 
 @Component({
     selector: 'app-show-list',
@@ -15,5 +17,31 @@ export class ShowListComponent {
         {name: "my list 444", description:'', pairs:[]}
     ]*/
 
+    selectedList: List;
+
     @Input() lists: List[] = [];
+
+    showTable() {
+        
+    }
+
+    onSelectedList(list: List) {
+        this.selectedList = list;
+    }
+
+    onAddIntoList(form:NgForm) {
+        if (form.invalid) {
+            return;
+        }
+        const pair : Pair = {
+            subject: form.value.subject,
+            code: form.value.code
+        };
+
+        this.selectedList.pairs.push(pair);
+    }
+
+
 }
+
+

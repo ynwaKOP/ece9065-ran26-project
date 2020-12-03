@@ -1,8 +1,19 @@
 :host {
     display: block;
-    margin-top: 16px;
+    margin-top: 8px;
 }
 
 .info-text {
     text-align: center;
+}
+
+.listname {
+    display: inline-block;
+    font-size: large;
+    color: white;
+    width: 70%;
+    height: 32px;
+    background-color:cadetblue;
+    line-height: 16px;
+    position: relative;
 }

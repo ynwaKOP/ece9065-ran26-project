@@ -28,6 +28,5 @@ export class ListCreateComponent {
         this.listCreated.emit(list);
         
     }
-
    
 }
