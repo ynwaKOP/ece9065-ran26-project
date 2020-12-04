@@ -1,0 +1,30 @@
+<h2>Visitor Page</h2>
+
+<div>
+  <form (submit)="searchCombo(searchComboForm)" #searchComboForm="ngForm">
+    <mat-form-field>
+        <input matInput type="text" name="subject" placeholder="Enter subjet" ngModel required #subject="ngModel">
+        <mat-error *ngIf="subject.invalid">  subject is required.  </mat-error>
+    </mat-form-field>
+    <mat-form-field >
+        <input matInput type="text" name="code" placeholder="Enter code" ngModel required #code="ngModel">
+        <mat-error *ngIf="code.invalid">  code is required.  </mat-error>
+    </mat-form-field>
+    
+    <button mat-raised-button 
+            color='accent'
+            type="submit">Searh subject+Code </button>
+
+  </form>
+
+
+  <ul *ngIf="courses">
+    <h2> Timetable</h2>
+
+    <li *ngFor="let course of courses">
+       <span>course.subject</span> -- course.code
+    </li>
+                
+</ul>
+
+</div>

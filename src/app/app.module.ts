@@ -13,13 +13,16 @@ import { ListCreateComponent } from './lists/list-create.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './header/header.component';
 import { ShowListComponent } from './lists/show-list/show-list.component';
+import { VisitorPageComponent } from './visitor/visitor.component'
+
 
 @NgModule({
   declarations: [
     AppComponent,
     ListCreateComponent,
     HeaderComponent,
-    ShowListComponent
+    ShowListComponent,
+    VisitorPageComponent
   ],
   
   imports: [

@@ -25,8 +25,8 @@ for (i = 0; i < 2; i++) {
         section: data[i].course_info[0].class_section.toString().toLowerCase(),
         component: data[i].course_info[0].ssr_component.toString().toLowerCase(),
 
-        start_timm: data[i].course_info[0].start_time.toString().toLowerCase(),
-        end_timm: data[i].course_info[0].end_time.toString().toLowerCase(),
+        start_time: data[i].course_info[0].start_time.toString().toLowerCase(),
+        end_time: data[i].course_info[0].end_time.toString().toLowerCase(),
         days: data[i].course_info[0].days.toString().toLowerCase(), 
         descr: data[i].course_info[0].descr.toString().toLowerCase()
         //info: data[i].course_info, 
