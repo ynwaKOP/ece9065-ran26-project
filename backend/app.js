@@ -50,9 +50,7 @@ app.get('/api/open/courses/:subject/:code', (req, res) => {
     for (i = 0; i < courses.length; i++) {
         if (subject.toLowerCase() === courses[i].subject 
                 && code.toLowerCase() === courses[i].code) {
-                    classes.push({
-                        course: courses[i]
-            });
+                    classes.push(courses[i]);
         }
     }
 
@@ -71,7 +69,7 @@ function isSimilar(s1, s2) {
     const n = s1.length;
     for (i = 0; i < s2.length-n; i++) {
         simi = Similarity.compareTwoStrings(s1, s2.substring(i, i+n+1));
-        if (simi >= 0.8) {
+        if (simi >= 0.7) {
             return true;
         }
     }
@@ -81,7 +79,7 @@ function isSimilar(s1, s2) {
 
 
 // search keyword
-app.get('/api/keyword/:key', (req, res) => {
+app.get('/api/open/keyword/:key', (req, res) => {
     var key = req.params.key;
     if (key.length < 5) {
         return res.status(404).send('at least 5 characters');
@@ -96,9 +94,7 @@ app.get('/api/keyword/:key', (req, res) => {
         console.log(simi1);
         console.log(simi2);
         if (simi1 || simi2 ) {
-            ans.push({
-                course: c
-            });
+            ans.push(c);
         }
     }
 
@@ -124,6 +120,21 @@ app.get('/api/open/publiclists', (req, res) => {
     
 });
 
+
+app.post('/api/open/publish', (req, res) => {
+    if (!sanitize(JSON.stringify(req.body))) {
+        return res.status(403).send(" invalid data receiving ")
+    }
+    const theList = req.body.list;
+    db.get('lists')
+        .push( theList[0] )
+        .write();
+    
+    return res.json({
+        success: True
+    });
+    
+});
 
 // CRUD schdule
 
