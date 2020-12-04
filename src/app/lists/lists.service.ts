@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { List } from './list.model'
+import { HttpClientModule } from '@angular/common/http'
 
 
 @Injectable({providedIn: 'root'})

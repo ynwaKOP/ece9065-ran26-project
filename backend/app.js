@@ -120,18 +120,18 @@ app.get('/api/open/publiclists', (req, res) => {
     
 });
 
-
+// publish a list
 app.post('/api/open/publish', (req, res) => {
     if (!sanitize(JSON.stringify(req.body))) {
         return res.status(403).send(" invalid data receiving ")
     }
-    const theList = req.body.list;
+    const theList = req.body;
     db.get('lists')
-        .push( theList[0] )
+        .push( theList )
         .write();
     
     return res.json({
-        success: True
+        success: "True"
     });
     
 });
@@ -282,4 +282,4 @@ function sanitize(str) {
 
 
 
-app.listen(PORT, () => console.log("running"));
+app.listen(PORT, () => console.log("this is my backend running"));
