@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
+var Similarity = require('string-similarity');
+
 app.use(express.json());
 
 const lowdb = require('lowdb');
@@ -36,11 +38,11 @@ for (i = 0; i < 2; i++) {
 
 
 
-//console.log(courses);
+//console.log(typeof(courses[0].name));
 
 
 // any combination of subject + code
-app.get('/api/open/courses/:subject?/:code?', (req, res) => {
+app.get('/api/open/courses/:subject/:code', (req, res) => {
     var subject = req.params.subject;
     var code = req.params.code;
     
@@ -64,6 +66,50 @@ app.get('/api/open/courses/:subject?/:code?', (req, res) => {
 });
 
 
+// check if s1 is part of s2 with minor mistakes.
+function isSimilar(s1, s2) {
+    const n = s1.length;
+    for (i = 0; i < s2.length-n; i++) {
+        simi = Similarity.compareTwoStrings(s1, s2.substring(i, i+n+1));
+        if (simi >= 0.8) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
+// search keyword
+app.get('/api/keyword/:key', (req, res) => {
+    var key = req.params.key;
+    if (key.length < 5) {
+        return res.status(404).send('at least 5 characters');
+    }
+
+    const ans = [];
+    key = key.replace(/\s/g, "").toLowerCase();
+   
+    for (let c of courses) {
+        const simi1 = isSimilar(key, c.code.replace(/\s/g, ""));
+        const simi2 = isSimilar(key, c.name.replace(/\s/g, ""))
+        console.log(simi1);
+        console.log(simi2);
+        if (simi1 || simi2 ) {
+            ans.push({
+                course: c
+            });
+        }
+    }
+
+    if (ans.length > 0) {
+        return res.json(ans);
+    }
+    else {
+        return res.status(404).send('key word search');
+    }
+    
+});
 
 
 
