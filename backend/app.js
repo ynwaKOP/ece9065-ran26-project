@@ -113,6 +113,18 @@ app.get('/api/keyword/:key', (req, res) => {
 
 
 
+//get 10 public lists (saved as lists in db)
+// ealier time first, loop backwards in client side to display.
+app.get('/api/open/publiclists', (req, res) => {
+    pubLists = db.get('lists')
+        .sortBy('timestamp')
+        .take(10)
+        .value();
+    return res.json(pubLists);
+    
+});
+
+
 // CRUD schdule
 
 // add new schedule
