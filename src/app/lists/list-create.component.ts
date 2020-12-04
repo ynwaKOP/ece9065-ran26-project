@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { List } from './list.model';
+import { ListsService } from './lists.service';
 
 @Component({
     selector: 'app-list-create',
@@ -14,18 +14,16 @@ export class ListCreateComponent {
     //enteredSub = 'sub';
     //enteredCode = 'code';
     //addNewRow = false;
-    @Output() listCreated = new EventEmitter<List>();
+
+    constructor(public listsService: ListsService) {}
 
     onAddList(form: NgForm) {
         if (form.invalid) {
             return;
         }
-        const list: List = {
-            name: form.value.name,
-            description: form.value.description,
-            pairs: []
-        };
-        this.listCreated.emit(list);
+        
+        this.listsService.addList(form.value.name, form.value.description);
+        form.resetForm();
         
     }
    

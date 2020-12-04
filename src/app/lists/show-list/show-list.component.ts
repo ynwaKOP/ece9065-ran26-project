@@ -1,7 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { List } from '../list.model';
+import { ListsService } from '../lists.service';
 import { Pair } from '../pair.model';
+
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-show-list',
@@ -9,17 +12,29 @@ import { Pair } from '../pair.model';
     styleUrls: ['./show-list.component.css']
 
 })
-export class ShowListComponent {
-    /*lists = [
-        {name: "my list 111", description:'optional 123123', pairs:[]},
-        {name: "my list 222", description:'', pairs:[]},
-        {name: "my list 333", description:'optional 33633', pairs:[]},
-        {name: "my list 444", description:'', pairs:[]}
-    ]*/
+export class ShowListComponent implements OnInit, OnDestroy {
+   
+
+    publish: boolean = false;
 
     selectedList: List;
 
-    @Input() lists: List[] = [];
+    lists: List[] = [];
+    private listsSub: Subscription;
+
+    constructor(public listsService: ListsService) {}
+
+    ngOnInit() {
+        this.lists = this.listsService.getLists();
+        this.listsSub = this.listsService.getListUpdateListener()
+            .subscribe((lists: List[]) => {
+                this.lists = lists;
+            });
+    }
+
+    ngOnDestroy() {
+        this.listsSub.unsubscribe();
+    }
 
     showTable() {
         
@@ -28,17 +43,18 @@ export class ShowListComponent {
     onSelectedList(list: List) {
         this.selectedList = list;
     }
-
+    
     onAddIntoList(form:NgForm) {
         if (form.invalid) {
             return;
         }
+        /*
         const pair : Pair = {
             subject: form.value.subject,
             code: form.value.code
         };
 
-        this.selectedList.pairs.push(pair);
+        this.selectedList.pairs.push(pair);*/
     }
 
 

@@ -3,12 +3,25 @@
 
 
 <h2>My Lists</h2>
-<ul class="lists">
-  <li *ngFor="let list of lists"
+<ul class="lists" *ngFor="let list of lists">
+  
+  <li 
     [class.selected]="list === selectedList"
     (click)="onSelectedList(list)">
-    <span class="listname"> {{ list.name }} </span> 
+    <span class="listname"> 
+      {{ list.name }} 
+    </span> 
+
   </li>
+
+  <button mat-button color="warn"
+  (click)="deleteList(hero)">Delete</button>
+
+  <label class="toggle-switch">
+      <input type="checkbox"> Public
+  </label>
+ 
+
 </ul>
 
 <div *ngIf="selectedList">
