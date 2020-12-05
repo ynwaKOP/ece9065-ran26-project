@@ -1,6 +1,6 @@
 <h2>Visitor Page</h2>
 
-<div>
+<menu>
   <form (submit)="searchCombo(searchComboForm)" #searchComboForm="ngForm">
     <mat-form-field>
         <input matInput type="text" name="subject" placeholder="Enter subjet" ngModel required #subject="ngModel">
@@ -82,7 +82,10 @@
     
   </div>
 
+</menu>
 
-  
 
+<div>
+  <app-show-list></app-show-list>
 </div>
+

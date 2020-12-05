@@ -112,7 +112,7 @@ app.get('/api/open/publiclists', (req, res) => {
     pubLists = db.get('lists')
         .sortBy('timestamp')
         .take(10)
-        .value();
+        .value()
     return res.json(pubLists);
     
 });

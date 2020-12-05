@@ -25,37 +25,26 @@ export class ShowListComponent implements OnInit, OnDestroy {
     constructor(public listsService: ListsService) {}
 
     ngOnInit() {
-        this.lists = this.listsService.getLists();
-        this.listsSub = this.listsService.getListUpdateListener()
-            .subscribe((lists: List[]) => {
-                this.lists = lists;
-            });
+        this.getPublicLists();
+    }
+
+
+    getPublicLists() {
+        this.listsService.getPubLicLists()
+            .subscribe(lists => this.lists = lists);
+
     }
 
     ngOnDestroy() {
         this.listsSub.unsubscribe();
     }
 
-    showTable() {
-        
-    }
 
     onSelectedList(list: List) {
         this.selectedList = list;
     }
     
-    onAddIntoList(form:NgForm) {
-        if (form.invalid) {
-            return;
-        }
-        /*
-        const pair : Pair = {
-            subject: form.value.subject,
-            code: form.value.code
-        };
 
-        this.selectedList.pairs.push(pair);*/
-    }
 
 
 }

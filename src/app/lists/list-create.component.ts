@@ -17,14 +17,16 @@ export class ListCreateComponent {
 
     constructor(public listsService: ListsService) {}
 
+
+    
     onAddList(form: NgForm) {
         if (form.invalid) {
             return;
         }
-        
-        this.listsService.addList(form.value.name, form.value.description);
+        /*
+        this.listsService.addList(form.value.name, form.value.description);*/
         form.resetForm();
         
-    }
+    } 
    
 }

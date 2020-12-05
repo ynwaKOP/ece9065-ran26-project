@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { CourseService } from '../course.service';
 import { Course } from '../course.model';
 import { NgForm } from '@angular/forms';
@@ -23,7 +23,8 @@ export class VisitorPageComponent implements OnInit {
     
     pubLists: List[];
     courses: Course[];
-
+    selectedList: List;
+  
     cols = ['subject', 'code', 'name', 'section', 
         'component'];
 
@@ -34,6 +35,9 @@ export class VisitorPageComponent implements OnInit {
     
     ngOnInit(): void {
     }
+
+
+    
 
 
     searchCombo(form: NgForm): Course[] {
@@ -54,6 +58,14 @@ export class VisitorPageComponent implements OnInit {
         .subscribe( c => this.courses = c);
       form.resetForm();
   }
+
+
+  // select public list
+  onSelectedList(list: List) {
+    this.selectedList = list;
+}
+
+
     
 }
 
