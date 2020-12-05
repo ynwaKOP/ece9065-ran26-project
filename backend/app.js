@@ -17,7 +17,7 @@ const db = lowdb(adapter);
 const data = require('./Lab3-timetable-data.json');
 
 const courses = [];
-for (i = 0; i < 2; i++) {
+for (i = 0; i < data.length; i++) {
     let cur = {
         subject: data[i].subject.toString().toLowerCase(),
         code: data[i].catalog_nbr.toString().toLowerCase(),
@@ -28,7 +28,7 @@ for (i = 0; i < 2; i++) {
         start_time: data[i].course_info[0].start_time.toString().toLowerCase(),
         end_time: data[i].course_info[0].end_time.toString().toLowerCase(),
         days: data[i].course_info[0].days.toString().toLowerCase(), 
-        descr: data[i].course_info[0].descr.toString().toLowerCase()
+        descr: data[i].catalog_description.toString().toLowerCase()
         //info: data[i].course_info, 
     };
 
@@ -67,15 +67,14 @@ app.get('/api/open/courses/:subject/:code', (req, res) => {
 // check if s1 is part of s2 with minor mistakes.
 function isSimilar(s1, s2) {
     const n = s1.length;
-    for (i = 0; i < s2.length-n; i++) {
-        simi = Similarity.compareTwoStrings(s1, s2.substring(i, i+n+1));
-        if (simi >= 0.7) {
+    for (i = 0; i < s2.length; i++) {
+        simi = Similarity.compareTwoStrings(s1, s2.substring(i, i+n));
+        if (simi >= 0.78) {
             return true;
         }
     }
     return false;
 }
-
 
 
 // search keyword
@@ -89,10 +88,8 @@ app.get('/api/open/keyword/:key', (req, res) => {
     key = key.replace(/\s/g, "").toLowerCase();
    
     for (let c of courses) {
-        const simi1 = isSimilar(key, c.code.replace(/\s/g, ""));
-        const simi2 = isSimilar(key, c.name.replace(/\s/g, ""))
-        console.log(simi1);
-        console.log(simi2);
+        const simi1 = isSimilar(key, c.name.replace(/\s/g, ""));
+        const simi2 = isSimilar(key, c.code.replace(/\s/g, ""));
         if (simi1 || simi2 ) {
             ans.push(c);
         }

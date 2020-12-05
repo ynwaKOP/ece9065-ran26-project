@@ -44,6 +44,16 @@ export class VisitorPageComponent implements OnInit {
           .subscribe( c => this.courses = c);
         form.resetForm();
     }
+
+
+    searchKeyword(form: NgForm): Course[] {
+      if (form.invalid) {
+          return;
+      }
+      this.courseService.searchKeyword(form.value.keyword)
+        .subscribe( c => this.courses = c);
+      form.resetForm();
+  }
     
 }
 

@@ -38,6 +38,20 @@ export class CourseService {
     }
 
 
+    searchKeyword(keyword: string): Observable<Course[]> {
+      if (!keyword.trim()) {
+          // if not search term, return empty hero array.
+          return of([]);
+      }
+    
+      const url = 'http://localhost:3000/api/open/keyword/' + keyword;
+      console.log(url);
+      return this.http.get<Course[]>(url).pipe(
+          catchError(this.handleError<Course[]>('searchHeroes', []))
+        );
+  }
+
+
     private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {
       

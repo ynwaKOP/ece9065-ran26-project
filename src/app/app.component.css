@@ -1,5 +1,14 @@
+header {
+    
+    width: 100%;
+    text-align: center;
+}
+
 main {
- 
-    width: 50%;
+
+    text-align: center;
+    width: 80%;
     margin: 16px auto;
 }
+
+

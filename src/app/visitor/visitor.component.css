@@ -1,3 +1,12 @@
+div {
+    float: inherit;
+}
+
+form {
+    float: left;
+    margin-left: 128px;
+}
+
 table {
     width: 120%;
     font-size: large;
@@ -19,5 +28,7 @@ p {
     float: left;
     margin-right: 26px;
     font-size: medium;
+    margin-bottom: 8px;
     
 }
+
