@@ -1,0 +1,23 @@
+table {
+    width: 120%;
+    font-size: large;
+}
+
+th {
+    font-size: large;
+    
+    color: burlywood;
+}
+
+td {
+    font-size: medium;
+    color: dar;
+
+}
+
+p {
+    float: left;
+    margin-right: 26px;
+    font-size: medium;
+    
+}

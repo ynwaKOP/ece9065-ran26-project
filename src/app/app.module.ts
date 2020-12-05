@@ -7,10 +7,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { HttpClientModule } from '@angular/common/http';
+import {CdkTableModule} from '@angular/cdk/table';
+import { MatTableModule } from '@angular/material/table';
+
 
 import { AppComponent } from './app.component';
 import { ListCreateComponent } from './lists/list-create.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './header/header.component';
 import { ShowListComponent } from './lists/show-list/show-list.component';
 import { VisitorPageComponent } from './visitor/visitor.component'
@@ -34,6 +38,9 @@ import { VisitorPageComponent } from './visitor/visitor.component'
     MatButtonModule,
     MatToolbarModule,
     MatExpansionModule,
+    MatTableModule,
+    CdkTableModule,
+    BrowserAnimationsModule,
     HttpClientModule
   ],
   providers: [],
