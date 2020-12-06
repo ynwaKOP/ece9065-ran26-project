@@ -11,9 +11,6 @@ export class ListCreateComponent {
 
     newListName = 'name';
     listDescription = 'descript';
-    //enteredSub = 'sub';
-    //enteredCode = 'code';
-    //addNewRow = false;
 
     constructor(public listsService: ListsService) {}
 

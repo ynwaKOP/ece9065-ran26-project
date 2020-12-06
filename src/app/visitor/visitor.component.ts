@@ -57,15 +57,17 @@ export class VisitorPageComponent implements OnInit {
       this.courseService.searchKeyword(form.value.keyword)
         .subscribe( c => this.courses = c);
       form.resetForm();
-  }
+    }
 
 
-  // select public list
-  onSelectedList(list: List) {
-    this.selectedList = list;
-}
+    // select public list
+    onSelectedList(list: List) {
+      this.selectedList = list;
+    }
 
 
+
+  
     
 }
 

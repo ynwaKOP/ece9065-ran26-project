@@ -133,6 +133,33 @@ app.post('/api/open/publish', (req, res) => {
     
 });
 
+app.post('/api/secure/createList/:user', (req, res) => {
+    if (!sanitize(JSON.stringify(req.body))) {
+        return res.status(403).send(" invalid data receiving ")
+    }
+    const newName = req.body.name;
+    const description = req.body.description;
+    const user = req.params.user;
+    temp = db.get('users').find({username:user}).value().myLists;
+    for (i = 0; i < temp.length; i++) {
+        if (temp[i].name === newName) {
+            return res.status(200).send("name already exists");
+        }
+    }
+
+    db.get('users').find({username:user}).value().myLists.push({
+        name: newName,
+        description: description,
+        timestamp: Date()
+    });
+    db.write();
+    return res.json({
+        success: "yes"
+    });
+
+});
+
+
 // CRUD schdule
 
 // add new schedule
