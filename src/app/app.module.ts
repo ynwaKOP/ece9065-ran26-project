@@ -18,7 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './header/header.component';
 import { ShowListComponent } from './lists/show-list/show-list.component';
 import { VisitorPageComponent } from './visitor/visitor.component'
-import { LoginComponent } from './visitor/login/login.component';
+//import { LoginComponent } from './visitor/login/login.component';
 
 
 @NgModule({
@@ -28,7 +28,7 @@ import { LoginComponent } from './visitor/login/login.component';
     HeaderComponent,
     ShowListComponent,
     VisitorPageComponent,
-    LoginComponent
+    //LoginComponent
   ],
   
   imports: [

@@ -15,6 +15,9 @@ export class ListsService {
     private lists: List[] = [];
     private listsUpdated = new Subject<List[]>();
 
+    private myLists: List[] = [];
+    private user = "user111";
+
 
     httpOptions = {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -29,25 +32,26 @@ export class ListsService {
         const url = 'http://localhost:3000/api/open/publiclists';
         console.log(url);
         return this.http.get<List[]>(url).pipe(
-            catchError(this.handleError<List[]>('searchHeroes', []))
+            catchError(this.handleError<List[]>('search', []))
           );
     }
 
     getListUpdateListener() {
         return this.listsUpdated.asObservable();
     }
-
-    /*
-    addList(name: string, description: string) {
-        const list: List = {
-            name: name,
-            description: description
-            
-        };
-
-        this.lists.push(list);
-        this.listsUpdated.next([...this.lists]);
-    } */
+    
+    addList(name: string, description: string ) {
+      const list: List = {name: name, description: description};
+      const url = 'http://localhost:3000/api/secure/createList/' + this.user;
+      console.log(url);
+      this.http.post<any>('http://localhost:3000/api/secure/createList/' + this.user, list).subscribe( responseData => {
+        console.log(responseData);
+        this.myLists.push(list);
+        this.listsUpdated.next([...this.myLists]);
+      }
+      );
+      
+    } 
 
 
     private handleError<T>(operation = 'operation', result?: T) {

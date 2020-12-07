@@ -37,8 +37,6 @@ export class VisitorPageComponent implements OnInit {
     }
 
 
-    
-
 
     searchCombo(form: NgForm): Course[] {
         if (form.invalid) {
