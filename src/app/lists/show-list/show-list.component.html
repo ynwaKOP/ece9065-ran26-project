@@ -5,9 +5,12 @@
       <mat-expansion-panel *ngFor="let list of lists">
         <mat-expansion-panel-header>
           {{ list.name }} -- {{list.creator}} -- {{list.classes.length}} courses
+
         </mat-expansion-panel-header>
 
         <p>{{list.description}}</p>
+        <p> last modified time: {{ list.timestamp }}</p>
+        <p>Course IDs:</p>
         <p *ngFor="let c of list.classes"> 
           {{ c.subject }} -- {{ c.code }}
         </p>

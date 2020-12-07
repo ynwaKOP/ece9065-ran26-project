@@ -16,7 +16,7 @@ export class ListsService {
     private listsUpdated = new Subject<List[]>();
 
     private myLists: List[] = [];
-    private user = "user111";
+    //private user = "user111";
 
 
     httpOptions = {
@@ -32,19 +32,30 @@ export class ListsService {
         const url = 'http://localhost:3000/api/open/publiclists';
         console.log(url);
         return this.http.get<List[]>(url).pipe(
-            catchError(this.handleError<List[]>('search', []))
+            catchError(this.handleError<List[]>('getPublicLists', []))
           );
     }
 
     getListUpdateListener() {
         return this.listsUpdated.asObservable();
     }
+
+
+    getMyOwnLists(user:string) {
+      const url = 'http://localhost:3000/api/secure/mylists/' + user;
+        console.log(url);
+        return this.http.get<List[]>(url).pipe(
+            catchError(this.handleError<List[]>('search', []))
+          );
+    }
+
+
     
-    addList(name: string, description: string ) {
+    addList(name: string, description: string, user:string ) {
       const list: List = {name: name, description: description};
-      const url = 'http://localhost:3000/api/secure/createList/' + this.user;
+      const url = 'http://localhost:3000/api/secure/createList/' + user;
       console.log(url);
-      this.http.post<any>('http://localhost:3000/api/secure/createList/' + this.user, list).subscribe( responseData => {
+      this.http.post<any>('http://localhost:3000/api/secure/createList/' + user, list).subscribe( responseData => {
         console.log(responseData);
         this.myLists.push(list);
         this.listsUpdated.next([...this.myLists]);

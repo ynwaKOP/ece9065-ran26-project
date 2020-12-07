@@ -1,6 +1,20 @@
 
 const express = require('express');
 const app = express();
+
+app.use((req,res,next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Headers", 
+    "Origin, X-Requested-With, Content-Type, Accept");
+
+    res.setHeader("Access-Control-Allow-Methods", 
+                  "GET, POST, PATCH, DELETE, OPTIONS"
+    );
+
+    next();
+});
+
+
 const PORT = 3000;
 
 var Similarity = require('string-similarity');
@@ -133,6 +147,8 @@ app.post('/api/open/publish', (req, res) => {
     
 });
 
+
+// add a new list
 app.post('/api/secure/createList/:user', (req, res) => {
     if (!sanitize(JSON.stringify(req.body))) {
         return res.status(403).send(" invalid data receiving ")
@@ -141,6 +157,9 @@ app.post('/api/secure/createList/:user', (req, res) => {
     const description = req.body.description;
     const user = req.params.user;
     temp = db.get('users').find({username:user}).value().myLists;
+    if (temp.length >= 20) {
+        return res.status(200).send("20 lists is the limit for every user");
+    }
     for (i = 0; i < temp.length; i++) {
         if (temp[i].name === newName) {
             return res.status(200).send("name already exists");
@@ -158,6 +177,18 @@ app.post('/api/secure/createList/:user', (req, res) => {
     });
 
 });
+
+
+//get personal lists
+app.get('/api/secure/myLists/:user', (req, res) => {
+    user = req.params.user;
+    pubLists = db.get('users').find({username:user}).value().myLists;
+    return res.json(pubLists);
+});
+
+
+
+
 
 
 // CRUD schdule

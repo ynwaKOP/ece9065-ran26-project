@@ -22,6 +22,11 @@ export class ShowListComponent implements OnInit, OnDestroy {
     lists: List[] = [];
     private listsSub: Subscription;
 
+    myLists: List[] = [];
+
+
+
+
     constructor(public listsService: ListsService) {}
 
     ngOnInit() {
@@ -31,7 +36,7 @@ export class ShowListComponent implements OnInit, OnDestroy {
 
     getPublicLists() {
         this.listsService.getPubLicLists()
-            .subscribe(lists => this.lists = lists);
+            .subscribe(lists => this.lists = lists.reverse());
 
     }
 

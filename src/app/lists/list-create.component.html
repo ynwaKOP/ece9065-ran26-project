@@ -17,3 +17,23 @@
 </mat-card>
 
 
+
+
+
+<div>
+    <h2>All My Lists</h2>
+    <mat-accordion multi="true" *ngIf="myLists.length > 0">
+      <mat-expansion-panel *ngFor="let list of myLists">
+        <mat-expansion-panel-header>
+          {{ list.name }}
+        </mat-expansion-panel-header>
+
+        <p>{{list.description}}</p>
+        <p *ngFor="let c of list.classes"> 
+          {{ c.subject }} -- {{ c.code }}
+        </p>
+       
+      </mat-expansion-panel>
+    </mat-accordion>
+
+</div>

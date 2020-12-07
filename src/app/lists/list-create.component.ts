@@ -14,22 +14,30 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 })
 export class ListCreateComponent {
 
-    newListName = 'name';
-    listDescription = 'descript';
+
+    myLists: List[] = [];
+    user = "user111";
 
     constructor(public listsService: ListsService) {}
 
-
+    ngOnInit() {
+        this.getMyOwnLists();
+    }
 
     onAddList(form: NgForm): void {
         if (form.invalid) {
             return;
         }
-
-        this.listsService.addList(form.value.name, form.value.description);
+        this.listsService.addList(form.value.name, form.value.description, this.user);
         form.resetForm();
         
     }
+
+    getMyOwnLists() {
+        this.listsService.getMyOwnLists(this.user)
+            .subscribe(myLists => this.myLists = myLists);
+    }
+   
     
    
 }
