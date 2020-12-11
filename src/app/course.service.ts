@@ -24,16 +24,16 @@ export class CourseService {
         private http: HttpClient
     ) { }
 
-    searchSubCode(subject: string, code: string): Observable<Course[]> {
+    searchSubCode(subject: string, code: string): Observable<Course> {
         if (!subject.trim() || !code.trim()) {
             // if not search term, return empty hero array.
-            return of([]);
+            return of();
         }
       
         const url = 'http://localhost:3000/api/open/courses/' + subject + '/' + code;
         console.log(url);
-        return this.http.get<Course[]>(url).pipe(
-            catchError(this.handleError<Course[]>('searchHeroes', []))
+        return this.http.get<Course>(url).pipe(
+            catchError(this.handleError<Course>('searchSubCode'))
           );
     }
 
@@ -47,7 +47,7 @@ export class CourseService {
       const url = 'http://localhost:3000/api/open/keyword/' + keyword;
       console.log(url);
       return this.http.get<Course[]>(url).pipe(
-          catchError(this.handleError<Course[]>('searchHeroes', []))
+          catchError(this.handleError<Course[]>('searchKeyword'))
         );
   }
 

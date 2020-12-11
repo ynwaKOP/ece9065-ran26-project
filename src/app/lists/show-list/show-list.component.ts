@@ -20,11 +20,9 @@ export class ShowListComponent implements OnInit, OnDestroy {
     selectedList: List;
 
     lists: List[] = [];
-    private listsSub: Subscription;
+    //private listsSub: Subscription;
 
     myLists: List[] = [];
-
-
 
 
     constructor(public listsService: ListsService) {}
@@ -41,7 +39,7 @@ export class ShowListComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.listsSub.unsubscribe();
+        //this.listsSub.unsubscribe();
     }
 
 

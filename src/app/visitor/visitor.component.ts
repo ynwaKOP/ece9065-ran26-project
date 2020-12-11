@@ -2,7 +2,8 @@ import { Component, OnInit} from '@angular/core';
 import { CourseService } from '../course.service';
 import { Course } from '../course.model';
 import { NgForm } from '@angular/forms';
-import { List } from '../lists/list.model'
+import { List } from '../lists/list.model';
+
 import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
@@ -22,7 +23,10 @@ export class VisitorPageComponent implements OnInit {
     //lists: 
     
     pubLists: List[];
-    courses: Course[];
+    courses: Course[] = new Array();
+  
+    //course: Course;
+
     selectedList: List;
   
     cols = ['subject', 'code', 'name', 'section', 
@@ -36,14 +40,14 @@ export class VisitorPageComponent implements OnInit {
     ngOnInit(): void {
     }
 
-
-
-    searchCombo(form: NgForm): Course[] {
+    searchCombo(form: NgForm) {
         if (form.invalid) {
             return;
         }
+        this.courses = [];        
         this.courseService.searchSubCode(form.value.subject, form.value.code)
-          .subscribe( c => this.courses = c);
+          .subscribe(c => this.courses.push(c));
+       
         form.resetForm();
     }
 
@@ -52,6 +56,7 @@ export class VisitorPageComponent implements OnInit {
       if (form.invalid) {
           return;
       }
+      this.courses =[];
       this.courseService.searchKeyword(form.value.keyword)
         .subscribe( c => this.courses = c);
       form.resetForm();

@@ -9,7 +9,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { HttpClientModule } from '@angular/common/http';
 import {CdkTableModule} from '@angular/cdk/table';
 import { MatTableModule } from '@angular/material/table';
-
+import {  MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 
 import { AppComponent } from './app.component';
 import { ListCreateComponent } from './lists/list-create.component';
@@ -18,7 +18,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './header/header.component';
 import { ShowListComponent } from './lists/show-list/show-list.component';
 import { VisitorPageComponent } from './visitor/visitor.component'
-//import { LoginComponent } from './visitor/login/login.component';
+import { LoginComponent } from './visitor/login/login.component';
+import { AppRoutingModule } from './app-routing.module';
+import { SignupComponent } from './visitor/login/signup.component';
 
 
 @NgModule({
@@ -28,7 +30,8 @@ import { VisitorPageComponent } from './visitor/visitor.component'
     HeaderComponent,
     ShowListComponent,
     VisitorPageComponent,
-    //LoginComponent
+    LoginComponent,
+    SignupComponent
   ],
   
   imports: [
@@ -40,11 +43,13 @@ import { VisitorPageComponent } from './visitor/visitor.component'
     MatCardModule,
     MatButtonModule,
     MatToolbarModule,
+    MatProgressSpinnerModule,
     MatExpansionModule,
     MatTableModule,
     CdkTableModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

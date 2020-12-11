@@ -5,3 +5,24 @@ textarea {
     width: 100%;
     margin-bottom: 16px;
 }
+
+
+table {
+    border-collapse:separate;
+    border-spacing:35px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    width: 80%;
+}
+
+th {
+    border-bottom: 1px solid gray;
+    background: none repeat scroll 0 0 #0775d3;
+    padding: 10px;
+    color: #FFFFFF;
+}
+
+tr {
+    border-top: 1px solid gray;
+    text-align: center;
+}
+

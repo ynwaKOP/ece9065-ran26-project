@@ -5,6 +5,6 @@ export interface List {
     description: string;
     //creator: string;
     //timestamp: string;
-    //classes: Pair[];
+    myCourses: Pair[];
    
 }

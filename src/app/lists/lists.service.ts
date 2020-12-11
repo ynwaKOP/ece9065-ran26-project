@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable, of } from 'rxjs';
 import { catchError, map} from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 
 
@@ -23,10 +24,7 @@ export class ListsService {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' })
       };
 
-      constructor(
-        private http: HttpClient,
-        
-    ) { }
+      constructor( private http: HttpClient, private router: Router) { }
 
     getPubLicLists() {
         const url = 'http://localhost:3000/api/open/publiclists';
@@ -52,17 +50,24 @@ export class ListsService {
 
     
     addList(name: string, description: string, user:string ) {
-      const list: List = {name: name, description: description};
+      const list: List = {name: name, description: description, myCourses:[]};
       const url = 'http://localhost:3000/api/secure/createList/' + user;
       console.log(url);
-      this.http.post<any>('http://localhost:3000/api/secure/createList/' + user, list).subscribe( responseData => {
-        console.log(responseData);
-        this.myLists.push(list);
-        this.listsUpdated.next([...this.myLists]);
-      }
+      return this.http.post<List>('http://localhost:3000/api/secure/createList/' + user, list).pipe(
+        catchError(this.handleError<List>('addList'))
+        //this.router.navigate(['/'])
       );
       
-    } 
+    }
+    
+    
+    removeList(name: string, user: string) {
+      const url = 'http://localhost:3000/api/secure/deleteList/' + user;
+      return this.http.delete<List>(url).pipe(
+        catchError(this.handleError<List>('deleteList'))
+      );
+
+    }
 
 
     private handleError<T>(operation = 'operation', result?: T) {

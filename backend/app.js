@@ -60,20 +60,15 @@ app.get('/api/open/courses/:subject/:code', (req, res) => {
     var subject = req.params.subject;
     var code = req.params.code;
     
-    const classes = [];
     for (i = 0; i < courses.length; i++) {
         if (subject.toLowerCase() === courses[i].subject 
                 && code.toLowerCase() === courses[i].code) {
-                    classes.push(courses[i]);
+                    return res.json(
+                        courses[i]);
         }
     }
-
-    if (classes.length > 0) {
-        return res.json(classes);
-    }
-    else {
-        return res.status(404).send('No results');
-    }
+    
+    return res.status(404).send('No results');
     
 });
 
@@ -83,7 +78,7 @@ function isSimilar(s1, s2) {
     const n = s1.length;
     for (i = 0; i < s2.length; i++) {
         simi = Similarity.compareTwoStrings(s1, s2.substring(i, i+n));
-        if (simi >= 0.78) {
+        if (simi >= 0.6) {
             return true;
         }
     }
@@ -188,6 +183,30 @@ app.get('/api/secure/myLists/:user', (req, res) => {
 
 
 
+
+app.post('/api/signup', (req, res, next) => {
+    if (!sanitize(JSON.stringify(req.body))) {
+        return res.status(403).send(" invalid data receiving ");
+    }
+    user = req.body;
+    if (db.get('users').find({email: user.email}).value()) {
+        return res.status(200).send(" email already registed!! ");
+    }
+
+    db.get('users').push({
+        username: user.username,
+        email: user.email,
+        password: user.password,
+        myLists: []
+    }).write();
+
+    return res.json({
+        user: user.username,
+        signup: "successful"
+    });
+
+    next();
+});
 
 
 

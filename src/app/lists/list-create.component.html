@@ -18,22 +18,58 @@
 
 
 
-
-
-<div>
+<menu>
     <h2>All My Lists</h2>
     <mat-accordion multi="true" *ngIf="myLists.length > 0">
       <mat-expansion-panel *ngFor="let list of myLists">
-        <mat-expansion-panel-header>
-          {{ list.name }}
+        <mat-expansion-panel-header [class.selected]="list === selectedList"
+        (click)="mySelectedList(list)">>
+          {{ list.name }} 
         </mat-expansion-panel-header>
+        <li>{{list.description}} 12333333333333098765yuiklkfdjghjgfdsx</li>
+        <li>Lat Modified time: {{ list .timestamp }}</li>
 
-        <p>{{list.description}}</p>
-        <p *ngFor="let c of list.classes"> 
-          {{ c.subject }} -- {{ c.code }}
-        </p>
-       
+        <button mat-raised-button color="warn" (click)="deleteList(list.name)">DELETE LIST</button>
       </mat-expansion-panel>
     </mat-accordion>
 
-</div>
+
+  <div>
+      
+    <div *ngIf="courses && courses.length > 0">
+      <h2>Search Results</h2>
+  
+      <table >
+        <tr>
+          <th>Subject</th>
+          <th>Code</th>
+          <th>Name</th>
+          <th>Section</th>
+          <th>Component</th>
+        </tr>
+
+
+        <tr *ngFor="let c of courses">
+          <td> {{ c.subject }}</td>
+          <td>  {{ c.code }}</td>
+          <td>{{ c.name }}</td>
+          <td> {{ c.component }}</td>
+          <td> {{ c.section }}</td>
+          <button mat-raised-button 
+          color='warn'
+          (click)="removeFromList(c.subject, c.code)">Remove From List</button>
+        </tr>
+
+     
+
+      </table>
+      
+    </div>
+
+
+  
+
+   </div>
+
+ 
+</menu>

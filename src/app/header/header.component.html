@@ -1,5 +1,16 @@
 <mat-toolbar color="primary"> 
-  <div style="width:100%;" class="md-toolbar-tools" > 
+  <span style="width:100%;" > 
     My Timetable APP
-  </div> 
+  </span> 
+
+  <span class="space"></span>
+
+    <ul>
+      <li>
+        <a mat-button routerLink="/user" routerLinkActive="mat-accent"> User Page</a>
+        <a mat-button routerLink="/" > visitor Page</a>
+        <a mat-button routerLink="/login" > Login</a>
+        <a mat-button routerLink="/signup" > Signup</a>
+      </li>
+    </ul>
 </mat-toolbar>
