@@ -1,11 +1,14 @@
 
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const checkAuth = require("./check-auth");
+
 const app = express();
 
 app.use((req,res,next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", 
-    "Origin, X-Requested-With, Content-Type, Accept");
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization");
 
     res.setHeader("Access-Control-Allow-Methods", 
                   "GET, POST, PATCH, DELETE, OPTIONS"
@@ -55,6 +58,9 @@ for (i = 0; i < data.length; i++) {
 //console.log(typeof(courses[0].name));
 
 
+
+//  ******* visitor section *******
+
 // any combination of subject + code
 app.get('/api/open/courses/:subject/:code', (req, res) => {
     var subject = req.params.subject;
@@ -68,7 +74,7 @@ app.get('/api/open/courses/:subject/:code', (req, res) => {
         }
     }
     
-    return res.status(404).send('No results');
+    return res.status(404).json({message: 'No results'});
     
 });
 
@@ -90,7 +96,7 @@ function isSimilar(s1, s2) {
 app.get('/api/open/keyword/:key', (req, res) => {
     var key = req.params.key;
     if (key.length < 5) {
-        return res.status(404).send('at least 5 characters');
+        return res.status(404).send({message: 'at least 5 characters'});
     }
 
     const ans = [];
@@ -108,7 +114,7 @@ app.get('/api/open/keyword/:key', (req, res) => {
         return res.json(ans);
     }
     else {
-        return res.status(404).send('key word search');
+        return res.status(404).json({message: 'check your input'});
     }
     
 });
@@ -126,10 +132,15 @@ app.get('/api/open/publiclists', (req, res) => {
     
 });
 
+
+
+
+//  ******* user section *******
+
 // publish a list
-app.post('/api/open/publish', (req, res) => {
+app.post('/api/secure/publish',checkAuth, (req, res) => {
     if (!sanitize(JSON.stringify(req.body))) {
-        return res.status(403).send(" invalid data receiving ")
+        return res.status(403).json({message : " invalid data receiving "});
     }
     const theList = req.body;
     db.get('lists')
@@ -137,60 +148,91 @@ app.post('/api/open/publish', (req, res) => {
         .write();
     
     return res.json({
-        success: "True"
+        message: theList.name + " published!"
     });
     
 });
 
 
 // add a new list
-app.post('/api/secure/createList/:user', (req, res) => {
+app.post('/api/secure/createList', checkAuth, (req, res, next) => {
+    
     if (!sanitize(JSON.stringify(req.body))) {
-        return res.status(403).send(" invalid data receiving ")
+        return res.status(403).json({message: " invalid data receiving "});
     }
+    
     const newName = req.body.name;
     const description = req.body.description;
-    const user = req.params.user;
-    temp = db.get('users').find({username:user}).value().myLists;
+
+    const username = req.userData.username;
+
+    temp = db.get('users').find({username:username}).value().myLists;
     if (temp.length >= 20) {
-        return res.status(200).send("20 lists is the limit for every user");
+        return res.status(200).json({message: "20 lists is the limit for every user"});
     }
     for (i = 0; i < temp.length; i++) {
         if (temp[i].name === newName) {
-            return res.status(200).send("name already exists");
+            return res.status(200).send({message: "name already exists"});
         }
     }
-
-    db.get('users').find({username:user}).value().myLists.push({
+    
+    db.get('users').find({username:username}).value().myLists.push({
         name: newName,
         description: description,
-        timestamp: Date()
+        classes: [],
+        timestamp: Date(),
     });
     db.write();
+
     return res.json({
-        success: "yes"
+        message: "new list added",
+        username: username
     });
 
 });
 
 
 //get personal lists
-app.get('/api/secure/myLists/:user', (req, res) => {
-    user = req.params.user;
-    pubLists = db.get('users').find({username:user}).value().myLists;
-    return res.json(pubLists);
+app.get('/api/secure/myLists', checkAuth, (req, res, next) => {
+    const username = req.userData.username;
+    myLists = db.get('users').find({username:username}).value().myLists;
+    //next();
+    //console.log(pubLists);
+    return res.json(myLists);
 });
 
 
 
+// delete a personal list
+app.delete('/api/secure/deleteList/:name', checkAuth, (req, res, next) => {
+    const username = req.userData.username;
+    const listName = req.params.name;
+    const myLists = db.get('users').find({username:username}).value().myLists;
+    for (i = 0; i < myLists.length; i++) {
+        if (myLists[i].name === listName) {
+            myLists.splice(i,1);
+            db.write();
+            return res.json({
+                message: listName + " deleted!"
+            });
 
+        }
+    }
+
+});
+
+
+
+//  ******* login/signup section  *******
+
+// user sign up
 app.post('/api/signup', (req, res, next) => {
     if (!sanitize(JSON.stringify(req.body))) {
-        return res.status(403).send(" invalid data receiving ");
+        return res.status(403).json( { message: " invalid data receiving "});
     }
     user = req.body;
     if (db.get('users').find({email: user.email}).value()) {
-        return res.status(200).send(" email already registed!! ");
+        return res.status(200).send( {message: " email already registed!! "});
     }
 
     db.get('users').push({
@@ -200,12 +242,42 @@ app.post('/api/signup', (req, res, next) => {
         myLists: []
     }).write();
 
+    next();
+
     return res.json({
-        user: user.username,
-        signup: "successful"
+        message : user.username + " registered successfully"
     });
 
-    next();
+    
+});
+
+
+
+
+ 
+// user login 
+app.post('/api/secure/login', (req, res, next) => {
+    if (!sanitize(JSON.stringify(req.body))) {
+        return res.status(403).send(" invalid data receiving ");
+    }
+    user = req.body;
+    if (!db.get('users').find({email: user.email, password: user.password}).value()) {
+        return res.status(200).send(" invalid email/password !! ");
+    } 
+
+    const uname = db.get('users').find({email: user.email}).value().username;
+    //console.log(uname);
+    const token = jwt.sign({email: user.email, username: uname}, 'abcdefghijklmn', 
+                { expiresIn: '1h'}
+        );
+
+    
+    
+    return res.status(200).json({
+        token: token,
+        expiresIn: 3600
+    });
+    
 });
 
 
@@ -355,5 +427,6 @@ function sanitize(str) {
 }
 
 
+module.exports = app;
 
 app.listen(PORT, () => console.log("this is my backend running"));

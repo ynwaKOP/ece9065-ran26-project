@@ -43,30 +43,36 @@ export class ListCreateComponent implements OnInit{
         this.getMyOwnLists();
     }
 
+
+    getMyOwnLists() {
+        this.listsService.getMyOwnLists()
+            .subscribe(myLists => this.myLists = myLists);
+    }
+
+
     onAddList(form: NgForm): void {
         if (form.invalid) {
             return;
         }
-        this.listsService.addList(form.value.name, form.value.description, this.user);
+        this.listsService.addList(form.value.name, form.value.description).subscribe(
+            c => this.myLists.push(c)
+        );
+        this.getMyOwnLists();
         form.resetForm();
         
     }
 
-    getMyOwnLists() {
-        this.listsService.getMyOwnLists(this.user)
-            .subscribe(myLists => this.myLists = myLists);
-    }
    
       // select a list
      mySelectedList(list: List){
           this.selectedList = list;
           const collect = [];
-          for (let p of this.selectedList.myCourses) {
+          for (let p of this.selectedList.classes) {
               this.courseService.searchSubCode(p.subject, p.code)
                 .subscribe(c => collect.push(c));
           }
           this.courses = collect;
-          console.log(this.courses = collect)
+          console.log(this.courses);
          
           
       }
@@ -78,7 +84,10 @@ export class ListCreateComponent implements OnInit{
 
 
       deleteList(name: string) {
-          console.log(name);
+          this.listsService.removeList(name)
+            .subscribe();
+
+        this.getMyOwnLists();
       }
 
    

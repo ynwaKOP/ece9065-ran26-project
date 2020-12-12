@@ -8,9 +8,7 @@ import { catchError, map} from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 
-
 @Injectable({providedIn: 'root'})
-
 
 export class ListsService {
     private lists: List[] = [];
@@ -39,8 +37,8 @@ export class ListsService {
     }
 
 
-    getMyOwnLists(user:string) {
-      const url = 'http://localhost:3000/api/secure/mylists/' + user;
+    getMyOwnLists() {
+      const url = 'http://localhost:3000/api/secure/mylists/';
         console.log(url);
         return this.http.get<List[]>(url).pipe(
             catchError(this.handleError<List[]>('search', []))
@@ -49,20 +47,22 @@ export class ListsService {
 
 
     
-    addList(name: string, description: string, user:string ) {
-      const list: List = {name: name, description: description, myCourses:[]};
-      const url = 'http://localhost:3000/api/secure/createList/' + user;
+    addList(name: string, description: string) {
+      const list: List = {name: name, description: description, classes:[]};
+      const url = "http://localhost:3000/api/secure/createList";
       console.log(url);
-      return this.http.post<List>('http://localhost:3000/api/secure/createList/' + user, list).pipe(
+      return this.http.post<List>(url, list).pipe(
         catchError(this.handleError<List>('addList'))
+        
         //this.router.navigate(['/'])
       );
       
     }
     
     
-    removeList(name: string, user: string) {
-      const url = 'http://localhost:3000/api/secure/deleteList/' + user;
+    removeList(name: string) {
+      const url = 'http://localhost:3000/api/secure/deleteList/' + name;
+      console.log(url);
       return this.http.delete<List>(url).pipe(
         catchError(this.handleError<List>('deleteList'))
       );
@@ -72,10 +72,8 @@ export class ListsService {
 
     private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {
-      
           // TODO: send the error to remote logging infrastructure
           console.error(error); // log to console instead
-      
           // Let the app keep running by returning an empty result.
           return of(result as T);
         };

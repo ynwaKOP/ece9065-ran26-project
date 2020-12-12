@@ -6,10 +6,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {CdkTableModule} from '@angular/cdk/table';
 import { MatTableModule } from '@angular/material/table';
-import {  MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 
 import { AppComponent } from './app.component';
 import { ListCreateComponent } from './lists/list-create.component';
@@ -21,6 +21,7 @@ import { VisitorPageComponent } from './visitor/visitor.component'
 import { LoginComponent } from './visitor/login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SignupComponent } from './visitor/login/signup.component';
+import { AuthInterceptor } from './visitor/login/auth-interceptor';
 
 
 @NgModule({
@@ -51,7 +52,9 @@ import { SignupComponent } from './visitor/login/signup.component';
     HttpClientModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
