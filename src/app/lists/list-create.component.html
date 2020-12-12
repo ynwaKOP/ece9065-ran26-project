@@ -20,17 +20,29 @@
 
 <menu>
     <h2>All My Lists</h2>
-    <mat-accordion multi="true" *ngIf="myLists.length > 0">
+    <mat-accordion class="listsDisplay" multi="true" *ngIf="myLists.length > 0">
       <mat-expansion-panel *ngFor="let list of myLists">
-        <mat-expansion-panel-header [class.selected]="list === selectedList"
-        (click)="mySelectedList(list)">>
-          {{ list.name }} 
+        <mat-expansion-panel-header>
+
+          <mat-panel-title [class.selected]="list === selectedList"
+          (click)="mySelectedList(list)"> {{list.name}} </mat-panel-title>
         </mat-expansion-panel-header>
+        
+        <button mat-raised-button 
+        color='warn'
+      (click)="deleteList(list.name)">Delete</button>
+      
+    <label class="toggle-switch">
+      <input type="checkbox" [checked]="!list.isPersonal" (change)="switchList(list)"> Public
+  </label>
+  
+
         <li>{{list.description}} 12333333333333098765yuiklkfdjghjgfdsx</li>
         <li>Lat Modified time: {{ list .timestamp }}</li>
 
-        <button mat-raised-button color="warn" (click)="deleteList(list.name)">DELETE LIST</button>
+        
       </mat-expansion-panel>
+     
     </mat-accordion>
 
 
@@ -46,6 +58,10 @@
           <th>Name</th>
           <th>Section</th>
           <th>Component</th>
+          <th> Year </th>
+          <th> Review </th>
+         
+        
         </tr>
 
 
@@ -55,9 +71,17 @@
           <td>{{ c.name }}</td>
           <td> {{ c.component }}</td>
           <td> {{ c.section }}</td>
-          <button mat-raised-button 
-          color='warn'
-          (click)="removeFromList(c.subject, c.code)">Remove From List</button>
+          <td>  {{ c.year }} </td>
+          <td>  {{ c.review }} </td>
+          
+          <td>
+
+            <button mat-raised-button 
+                color='warn'
+              (click)="removeFromList(c.subject, c.code)">Remove</button>
+          </td>
+       
+          
         </tr>
 
      

@@ -142,14 +142,55 @@ app.post('/api/secure/publish',checkAuth, (req, res) => {
     if (!sanitize(JSON.stringify(req.body))) {
         return res.status(403).json({message : " invalid data receiving "});
     }
-    const theList = req.body;
-    db.get('lists')
-        .push( theList )
-        .write();
+
     
-    return res.json({
-        message: theList.name + " published!"
-    });
+    const username = req.userData.username;
+    const list = req.body;
+
+
+    const myLists = db.get('users').find({username: username}).value().myLists;
+    console.log(myLists);
+
+    for (i = 0; i < myLists.length; i++) {
+        if (myLists[i].name === list.name) {
+            myLists[i].isPersonal = list.isPersonal;
+            db.write();
+            break;
+        }
+    }
+
+    if (list.isPersonal) {
+        const temp = db.get('lists').value();
+        for (i = 0; i < temp.length; i++) {
+            if (temp[i].name === list.name) {
+                temp.splice(i,1);
+                db.write();
+                return res.json({
+                    message: "list is personal now"
+                });
+            }
+        }
+    }
+    else {
+
+        const theList = {   
+            name: list.name, 
+            description: list.description, 
+            classes: list.classes, 
+            isPersonal: false,
+            creator: username,
+            timestamp: Date()
+        };
+
+        db.get('lists')
+            .push( theList )
+                .write();
+
+        return res.json({
+            message: theList.name + " published!"
+        });
+    }
+
     
 });
 
@@ -163,10 +204,10 @@ app.post('/api/secure/createList', checkAuth, (req, res, next) => {
     
     const newName = req.body.name;
     const description = req.body.description;
-
+    
     const username = req.userData.username;
 
-    temp = db.get('users').find({username:username}).value().myLists;
+    const temp = db.get('users').find({username:username}).value().myLists;
     if (temp.length >= 20) {
         return res.status(200).json({message: "20 lists is the limit for every user"});
     }
@@ -180,7 +221,8 @@ app.post('/api/secure/createList', checkAuth, (req, res, next) => {
         name: newName,
         description: description,
         classes: [],
-        timestamp: Date(),
+        isPersonal: true,
+        timestamp: Date()
     });
     db.write();
 
@@ -241,8 +283,6 @@ app.post('/api/signup', (req, res, next) => {
         password: user.password,
         myLists: []
     }).write();
-
-    next();
 
     return res.json({
         message : user.username + " registered successfully"

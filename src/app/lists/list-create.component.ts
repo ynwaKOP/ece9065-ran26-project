@@ -9,6 +9,7 @@ import { List } from '../lists/list.model'
 import {animate, state, style, transition, trigger} from '@angular/animations';
 
 
+
 @Component({
     selector: 'app-list-create',
     templateUrl: './list-create.component.html',
@@ -23,6 +24,10 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 })
 export class ListCreateComponent implements OnInit{
 
+    
+    isPersonal: boolean = true;
+
+    message: string;
 
     myLists: List[] = [];
     user = "user111";
@@ -47,6 +52,7 @@ export class ListCreateComponent implements OnInit{
     getMyOwnLists() {
         this.listsService.getMyOwnLists()
             .subscribe(myLists => this.myLists = myLists);
+        this.courses = [];
     }
 
 
@@ -62,18 +68,34 @@ export class ListCreateComponent implements OnInit{
         
     }
 
+
+    deleteList(name: string) {
+        this.listsService.removeList(name)
+          .subscribe();
+
+      this.getMyOwnLists();
+    }
+
+
+
+    switchList(list: List) {
+        this.listsService.switchList(list)
+            .subscribe();
+        this.getMyOwnLists();
+    }
+
+
    
       // select a list
      mySelectedList(list: List){
           this.selectedList = list;
+          console.log(list.isPersonal);
           const collect = [];
           for (let p of this.selectedList.classes) {
               this.courseService.searchSubCode(p.subject, p.code)
                 .subscribe(c => collect.push(c));
           }
           this.courses = collect;
-          console.log(this.courses);
-         
           
       }
 
@@ -83,12 +105,6 @@ export class ListCreateComponent implements OnInit{
       }
 
 
-      deleteList(name: string) {
-          this.listsService.removeList(name)
-            .subscribe();
-
-        this.getMyOwnLists();
-      }
 
    
    

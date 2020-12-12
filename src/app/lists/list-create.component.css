@@ -11,7 +11,7 @@ table {
     border-collapse:separate;
     border-spacing:35px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    width: 80%;
+    width: 75%;
 }
 
 th {
@@ -26,3 +26,13 @@ tr {
     text-align: center;
 }
 
+menu,
+.listsDisplay {
+    width: 50%;
+}
+
+.toggle-switch {
+    height: 70px;
+    width: 70px;
+    color: royalblue;
+}

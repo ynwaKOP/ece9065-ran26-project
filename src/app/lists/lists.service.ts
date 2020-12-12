@@ -46,9 +46,25 @@ export class ListsService {
     }
 
 
+    switchList(list: List) {
+      const url = 'http://localhost:3000/api/secure/publish';
+      const theList: List = {
+        name: list.name, 
+        description: list.description, 
+        classes:list.classes, 
+        isPersonal: !list.isPersonal
+      };
+      console.log(url);
+      return this.http.post<List>(url, theList).pipe(
+        catchError(this.handleError<List>())
+      );
+
+    }
+
+
     
     addList(name: string, description: string) {
-      const list: List = {name: name, description: description, classes:[]};
+      const list: List = {name: name, description: description, classes:[], isPersonal: true};
       const url = "http://localhost:3000/api/secure/createList";
       console.log(url);
       return this.http.post<List>(url, list).pipe(

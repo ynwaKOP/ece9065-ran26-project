@@ -30,6 +30,7 @@ export class AuthService {
         this.http.post(url, authData)
             .subscribe(r => {
                 console.log(r);
+                this.router.navigate(['/login']);
             });
     }
 

@@ -9,8 +9,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {CdkTableModule} from '@angular/cdk/table';
 import { MatTableModule } from '@angular/material/table';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import { AppComponent } from './app.component';
 import { ListCreateComponent } from './lists/list-create.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -46,11 +46,14 @@ import { AuthInterceptor } from './visitor/login/auth-interceptor';
     MatToolbarModule,
     MatProgressSpinnerModule,
     MatExpansionModule,
+    MatCheckboxModule,
+    
     MatTableModule,
     CdkTableModule,
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule
+    
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}

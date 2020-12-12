@@ -6,5 +6,6 @@ export interface List {
     //creator: string;
     //timestamp: string;
     classes: Pair[];
-   
+    isPersonal: boolean;
+
 }

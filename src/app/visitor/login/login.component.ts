@@ -20,6 +20,6 @@ export class LoginComponent {
         }
 
         this.authService.userLogin(form.value.email, form.value.password);
-        console.log("logging in....")
+        
     }
 }
