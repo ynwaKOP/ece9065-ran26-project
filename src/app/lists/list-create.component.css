@@ -11,7 +11,7 @@ table {
     border-collapse:separate;
     border-spacing:35px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    width: 75%;
+    width: 100%;
 }
 
 th {
@@ -46,3 +46,14 @@ div,
     width: 10%;
 }
 
+
+.spacer {
+    text-align: center;
+}
+
+::placeholder {
+    color:midnightblue;
+    font-size: small;
+    font-weight: 600;
+    font-style: initial;
+}

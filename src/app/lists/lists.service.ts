@@ -117,12 +117,26 @@ export class ListsService {
           name: listName
       }
 
-        console.log(temp);
-
         const url = 'http://localhost:3000/api/secure/setYear';
         
         return this.http.post<any>(url, temp).subscribe();
     }
+
+
+
+    addReview(listName: string, subject: string, code: string, review: string) {
+      const temp = {
+        name: listName,
+        subject: subject,
+        code: code,
+        review: review,
+      }
+
+      const url = 'http://localhost:3000/api/secure/addReview';
+        
+      return this.http.post<any>(url, temp).subscribe();
+      
+  }
 
 
     private handleError<T>(operation = 'operation', result?: T) {

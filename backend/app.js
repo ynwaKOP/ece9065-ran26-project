@@ -372,6 +372,39 @@ app.post('/api/secure/setYear', checkAuth, (req, res, next) => {
 });
 
 
+
+
+// add review 
+app.post('/api/secure/addReview', checkAuth, (req, res, next) => {
+
+    const username = req.userData.username;
+    
+    const listName = req.body.name;
+    const subject = req.body.subject;
+    const code = req.body.code;
+    const review = req.body.review;
+
+    const lists = db.get('users').find({username:username}).value().myLists;
+    for (i = 0; i < lists.length; i++) {
+        //console.log(lists[i]);
+        if (lists[i].name === listName) {
+            const temp = lists[i].classes;
+            for (j = 0; j < temp.length; j++) {
+                if (temp[j].subject === subject && temp[j].code === code) {
+                    temp[j].review = review;
+                    lists[i].timestamp = Date();
+                    db.write();
+                    console.log('here');
+                    return res.json({message: "course review added"});
+                }
+            }
+
+        }
+    }
+
+});
+
+
 //  ******* login/signup section  *******
 
 // user sign up

@@ -31,8 +31,14 @@
   </form>
 
 
-  <div *ngIf="courses && courses.length > 0">
-    <h2>Search Results</h2>
+
+
+  <div *ngIf="courses && courses.length > 0" class="results">
+    <br> <br> <br> <br> <br> <br> <br>
+    <hr>
+   
+    <span class="spacer"> Search results table </span>
+    <hr>
 
     <table mat-table [dataSource]="courses" multiTemplateDataRows>
 

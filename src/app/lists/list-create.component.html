@@ -60,10 +60,16 @@
 
     </mat-accordion>
 
+
+   <br><br><br><br><br>
       
     <div *ngIf="selectedList">
 
-      <h2>Timetable</h2>
+     
+        <h2>Timetable</h2>
+     
+
+     
       <table >
         <tr>
           <th>Subject</th>
@@ -97,8 +103,10 @@
           </select>
       </td>
 
-
-          <td>  {{ info[i].review }} </td>
+          <td> 
+            <textarea type="text" name="review"  cols="10" rows="5" placeholder= "{{info[i].review}}" #theReview></textarea> 
+            <button mat-mini-fab color="primary" (click)="addReview(selectedList.name, c.subject, c.code, theReview.value)"> review</button>
+           </td>
           
           <td>
 

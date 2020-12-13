@@ -93,6 +93,15 @@ export class ListCreateComponent implements OnInit{
         this.listsService.setYear(event.target.value,  subject, code, listname);
     }
 
+
+    addReview(listName: string, subject: string, code: string, review: string) {
+        //console.log(listName + '////' + subject + "/////" + code + "......" + review);
+        if (!review) {
+            return;
+        }
+        this.listsService.addReview(listName, subject, code, review);
+    }
+
    
       // select a list
      mySelectedList(list: List){
