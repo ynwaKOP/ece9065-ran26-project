@@ -394,7 +394,7 @@ app.post('/api/secure/addReview', checkAuth, (req, res, next) => {
                     temp[j].review = review;
                     lists[i].timestamp = Date();
                     db.write();
-                    console.log('here');
+                    
                     return res.json({message: "course review added"});
                 }
             }

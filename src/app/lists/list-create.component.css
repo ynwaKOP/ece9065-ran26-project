@@ -1,4 +1,10 @@
 
+mat-panel-title {
+    font-size: large;
+    font-weight: bold;
+    color:rgb(235, 137, 8);
+}
+
 mat-form-field,
 textarea {
     margin-top: 16px;
@@ -6,6 +12,13 @@ textarea {
     margin-bottom: 16px;
 }
 
+mat-expansion-panel,
+li {
+    margin-top: 20px;
+    text-align: left;
+    padding-left: 16px;
+
+}
 
 table {
     border-collapse:separate;

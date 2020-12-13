@@ -37,8 +37,8 @@
   </label>
   
 
-        <li>{{list.description}} 12333333333333098765yuiklkfdjghjgfdsx</li>
-        <li>Lat Modified time: {{ list .timestamp }}</li>
+        <li *ngIf="list.description">{{list.description}} </li>
+        <li>Last Modified time: {{ list .timestamp }}</li>
 
         <form (submit)="onAddIntoList(addForm, list.name)" #addForm="ngForm">
           <mat-form-field>
