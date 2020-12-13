@@ -11,5 +11,8 @@ export interface Course {
     days: string;
     descr: string;
     
+    year: string;
+    review: string;
+    
 }
 

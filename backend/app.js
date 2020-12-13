@@ -2,6 +2,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const checkAuth = require("./check-auth");
+const bodyParser = require('body-parser');
 
 const app = express();
 
@@ -18,6 +19,11 @@ app.use((req,res,next) => {
 });
 
 
+app.use(bodyParser.urlencoded({extended: false}));
+
+app.use(bodyParser.json());
+
+
 const PORT = 3000;
 
 var Similarity = require('string-similarity');
@@ -32,6 +38,7 @@ const adapter = lowdb(new FileSync('db.json'));
 const db = lowdb(adapter);
 
 const data = require('./Lab3-timetable-data.json');
+const { couldStartTrivia } = require('typescript');
 
 const courses = [];
 for (i = 0; i < data.length; i++) {
@@ -138,15 +145,13 @@ app.get('/api/open/publiclists', (req, res) => {
 //  ******* user section *******
 
 // publish a list
-app.post('/api/secure/publish',checkAuth, (req, res) => {
+app.post('/api/secure/publish', checkAuth, (req, res) => {
     if (!sanitize(JSON.stringify(req.body))) {
         return res.status(403).json({message : " invalid data receiving "});
     }
 
-    
     const username = req.userData.username;
     const list = req.body;
-
 
     const myLists = db.get('users').find({username: username}).value().myLists;
     console.log(myLists);
@@ -237,9 +242,10 @@ app.post('/api/secure/createList', checkAuth, (req, res, next) => {
 //get personal lists
 app.get('/api/secure/myLists', checkAuth, (req, res, next) => {
     const username = req.userData.username;
-    myLists = db.get('users').find({username:username}).value().myLists;
+    const myLists = db.get('users').find({username:username}).value().myLists;
     //next();
     //console.log(pubLists);
+   
     return res.json(myLists);
 });
 
@@ -263,6 +269,107 @@ app.delete('/api/secure/deleteList/:name', checkAuth, (req, res, next) => {
 
 });
 
+
+
+
+app.post('/api/secure/addCourse', checkAuth, (req, res, next) => {
+
+    const username = req.userData.username;
+
+    const listName = req.body.name;
+    const subject = req.body.subject;
+    const code = req.body.code;
+
+    console.log(listName);
+
+    const c = {
+        subject: subject,
+        code: code,
+        review: '',
+        year: '0'
+
+    }
+
+
+   
+    const lists = db.get('users').find({username:username}).value().myLists;
+    
+    for (i = 0; i < lists.length; i++) {
+        //console.log(lists[i].name);
+        if (lists[i].name === listName) {
+
+            lists[i].classes.push(c);
+            lists[i].timestamp = Date();
+            db.write();
+
+            return  res.json({message: subject+code + " added into " + listName });
+        }
+    }
+    
+    return res.json({message: "cannot add the course"});
+});
+
+
+
+// delete a course from list
+app.delete('/api/secure/deleteCourse/:name/:subject/:code', checkAuth, (req, res, next) => {
+    const username = req.userData.username;
+
+    const listName = req.params.name;
+    const subject = req.params.subject;
+    const code = req.params.code;
+    
+    const lists = db.get('users').find({username:username}).value().myLists;
+    for (i = 0; i < lists.length; i++) {
+        if (lists[i].name === listName) {
+            const temp = lists[i].classes;
+            for (j = 0; j < temp.length; j++) {
+                if (temp[j].subject === subject && temp[j].code === code) {
+                    temp.splice(j ,1);
+                    lists[i].timestamp = Date();
+                    db.write();
+                    return res.json({message: "course removed"});
+                }
+            }
+
+        }
+    }
+
+});
+
+
+// set year
+app.post('/api/secure/setYear', checkAuth, (req, res, next) => {
+
+    const username = req.userData.username;
+    
+    const listName = req.body.name;
+    const subject = req.body.subject;
+    const code = req.body.code;
+    const yr = req.body.year;
+
+
+
+
+    const lists = db.get('users').find({username:username}).value().myLists;
+    for (i = 0; i < lists.length; i++) {
+        //console.log(lists[i]);
+        if (lists[i].name === listName) {
+           
+            const temp = lists[i].classes;
+            for (j = 0; j < temp.length; j++) {
+                if (temp[j].subject === subject && temp[j].code === code) {
+                    temp[j].year = yr;
+                    lists[i].timestamp = Date();
+                    db.write();
+                    return res.json({message: "course year added"});
+                }
+            }
+
+        }
+    }
+
+});
 
 
 //  ******* login/signup section  *******

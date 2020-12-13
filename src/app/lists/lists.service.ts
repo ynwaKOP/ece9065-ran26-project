@@ -11,11 +11,8 @@ import { Router } from '@angular/router';
 @Injectable({providedIn: 'root'})
 
 export class ListsService {
-    private lists: List[] = [];
+    
     private listsUpdated = new Subject<List[]>();
-
-    private myLists: List[] = [];
-    //private user = "user111";
 
 
     httpOptions = {
@@ -83,6 +80,48 @@ export class ListsService {
         catchError(this.handleError<List>('deleteList'))
       );
 
+    }
+
+
+
+
+    addIntoList(subject: string, code: string, listName: string) {
+        const url = 'http://localhost:3000/api/secure/addCourse';
+        const c = {
+            subject: subject,
+            code: code,
+            name: listName
+        };
+
+        return this.http.post<any>(url, c).pipe(
+          catchError(this.handleError<any>('addIntoList'))
+        )
+
+    }
+
+
+    removeFromList(subject: string, code: string, listName: string) {
+        console.log(subject+code+listName);
+        const url = 'http://localhost:3000/api/secure/deleteCourse/' + listName + '/' + subject + '/' + code;
+        console.log(url)
+        return this.http.delete<any>(url, this.httpOptions).subscribe();
+    }
+
+
+    setYear(y: string, subject: string, code: string, listName: string) {
+
+      const temp = {
+          year: y,
+          subject: subject,
+          code: code,
+          name: listName
+      }
+
+        console.log(temp);
+
+        const url = 'http://localhost:3000/api/secure/setYear';
+        
+        return this.http.post<any>(url, temp).subscribe();
     }
 
 

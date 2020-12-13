@@ -24,7 +24,7 @@
       <mat-expansion-panel *ngFor="let list of myLists">
         <mat-expansion-panel-header>
 
-          <mat-panel-title [class.selected]="list === selectedList"
+          <mat-panel-title 
           (click)="mySelectedList(list)"> {{list.name}} </mat-panel-title>
         </mat-expansion-panel-header>
         
@@ -40,17 +40,30 @@
         <li>{{list.description}} 12333333333333098765yuiklkfdjghjgfdsx</li>
         <li>Lat Modified time: {{ list .timestamp }}</li>
 
-        
+        <form (submit)="onAddIntoList(addForm, list.name)" #addForm="ngForm">
+          <mat-form-field>
+              <input matInput type="text" name="subject" placeholder="Enter subjet" ngModel required #subject="ngModel">
+              <mat-error *ngIf="subject.invalid">  subject is required.  </mat-error>
+          </mat-form-field>
+          <mat-form-field >
+              <input matInput type="text" name="code" placeholder="Enter code" ngModel required #code="ngModel">
+              <mat-error *ngIf="code.invalid">  code is required.  </mat-error>
+          </mat-form-field>
+          
+          <button mat-raised-button 
+                  color='accent'
+                  type="submit">Add Into The List</button>
+      
+      </form>
+              
       </mat-expansion-panel>
-     
+
     </mat-accordion>
 
-
-  <div>
       
-    <div *ngIf="courses && courses.length > 0">
-      <h2>Search Results</h2>
-  
+    <div *ngIf="selectedList">
+
+      <h2>Timetable</h2>
       <table >
         <tr>
           <th>Subject</th>
@@ -58,42 +71,49 @@
           <th>Name</th>
           <th>Section</th>
           <th>Component</th>
+
           <th> Year </th>
           <th> Review </th>
-         
         
         </tr>
 
-
-        <tr *ngFor="let c of courses">
+        <tr *ngFor="let c of courses; let i = index">
           <td> {{ c.subject }}</td>
           <td>  {{ c.code }}</td>
           <td>{{ c.name }}</td>
           <td> {{ c.component }}</td>
           <td> {{ c.section }}</td>
-          <td>  {{ c.year }} </td>
-          <td>  {{ c.review }} </td>
+        
+          
+        <td>    
+          <select  class='Yearselect' 
+          (change)="setYear($event, c.subject, c.code, selectedList.name)" [value]= "info[i].year">
+            <option value='1'>1</option>
+              <option value='2'>2</option>
+              <option value='3'>3</option>
+              <option value='4'>4</option>
+              <option value='5'>5</option>
+              <option value='6'>6</option>
+          </select>
+      </td>
+
+
+          <td>  {{ info[i].review }} </td>
           
           <td>
 
             <button mat-raised-button 
                 color='warn'
-              (click)="removeFromList(c.subject, c.code)">Remove</button>
+              (click)="removeFromList(c.subject, c.code, selectedList.name)">Remove</button>
           </td>
        
           
         </tr>
 
-     
-
       </table>
       
     </div>
 
-
-  
-
-   </div>
 
  
 </menu>

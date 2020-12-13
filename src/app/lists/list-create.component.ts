@@ -10,6 +10,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 
 
 
+
 @Component({
     selector: 'app-list-create',
     templateUrl: './list-create.component.html',
@@ -30,11 +31,12 @@ export class ListCreateComponent implements OnInit{
     message: string;
 
     myLists: List[] = [];
-    user = "user111";
 
     courses: Course[] = [];
     selectedList: List;
-    expandedElement: Course;
+
+    info: any = [];
+    
   
     cols = ['subject', 'code', 'name', 'section', 
         'component'];
@@ -50,9 +52,10 @@ export class ListCreateComponent implements OnInit{
 
 
     getMyOwnLists() {
+        
         this.listsService.getMyOwnLists()
-            .subscribe(myLists => this.myLists = myLists);
-        this.courses = [];
+            .subscribe(ls => this.myLists = ls);
+        
     }
 
 
@@ -85,23 +88,48 @@ export class ListCreateComponent implements OnInit{
     }
 
 
+    setYear(event: any, subject: string, code: string, listname: string) {
+        
+        this.listsService.setYear(event.target.value,  subject, code, listname);
+    }
+
    
       // select a list
      mySelectedList(list: List){
-          this.selectedList = list;
-          console.log(list.isPersonal);
-          const collect = [];
-          for (let p of this.selectedList.classes) {
+        this.courses = [];
+        this.selectedList = list;
+        this.info = this.selectedList.classes;
+        
+        const collect = [];
+          for (var p of this.selectedList.classes) {
               this.courseService.searchSubCode(p.subject, p.code)
                 .subscribe(c => collect.push(c));
           }
-          this.courses = collect;
+          
+          this.courses = collect;          
           
       }
 
 
-      removeFromList(subject:string, code:string) {
-            console.log(subject+ code);
+    removeFromList(subject: string, code: string, listName: string) {
+        this.listsService.removeFromList(subject, code, listName);
+        
+    }
+
+
+      getSelectedListName() {
+          return this.selectedList.name;
+      }
+
+      //add a course into list
+      onAddIntoList(form: NgForm, listName: string): void {
+          if (form.invalid) {
+            return;
+        }
+        console.log(form.value.subject + form.value.code + listName);
+        this.listsService.addIntoList(form.value.subject, form.value.code, listName).subscribe();
+        form.resetForm();
+       
       }
 
 

@@ -36,3 +36,13 @@ menu,
     width: 70px;
     color: royalblue;
 }
+
+div,
+.addCard {
+    width: 50%;
+}
+
+.yearSelect {
+    width: 10%;
+}
+
