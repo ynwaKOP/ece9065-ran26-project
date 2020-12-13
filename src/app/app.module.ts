@@ -21,6 +21,7 @@ import { VisitorPageComponent } from './visitor/visitor.component'
 import { LoginComponent } from './visitor/login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SignupComponent } from './visitor/login/signup.component';
+import { AdminComponent } from './visitor/login/admin.component';
 import { AuthInterceptor } from './visitor/login/auth-interceptor';
 
 
@@ -32,7 +33,8 @@ import { AuthInterceptor } from './visitor/login/auth-interceptor';
     ShowListComponent,
     VisitorPageComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    AdminComponent
   ],
   
   imports: [

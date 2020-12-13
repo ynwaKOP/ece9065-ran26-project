@@ -1,0 +1,30 @@
+<h2>Admin Page</h2>
+
+
+
+<form (submit)="active(activeForm)" #activeForm="ngForm">
+    <mat-form-field>
+        <input matInput type="email" name="activeEmail" placeholder="Enter user email to active" ngModel required #activeEmail="ngModel">
+        <mat-error *ngIf="activeEmail.invalid">  invalid email   </mat-error>
+    </mat-form-field>
+    <button mat-raised-button 
+            color='accent'
+            type="submit">Active this user </button>
+
+  </form>
+
+<br><br><br><br>
+
+ 
+
+  <form (submit)="deActive(deForm)" #deForm="ngForm">
+    <mat-form-field>
+        <input matInput type="email" name="deemail" placeholder="Enter user email to deactive" ngModel required #deactiveEmail="ngModel">
+        <mat-error *ngIf="deactiveEmail.invalid">  invalid email   </mat-error>
+    </mat-form-field>
+    <button mat-raised-button 
+            color='accent'
+            type="submit">Deactive this user </button>
+
+  </form>
+  

@@ -1,3 +1,14 @@
+mat-card {
+    margin-top: 5rem;
+    margin-bottom: 15rem;
+}
+
 mat-form-field {
     width: 100%;
+}
+
+.spacer{
+    width:50%;
+    height:auto;
+    display:inline-block;
 }

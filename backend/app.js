@@ -441,8 +441,12 @@ app.post('/api/secure/login', (req, res, next) => {
         return res.status(403).send(" invalid data receiving ");
     }
     user = req.body;
+    if (db.get('deactive').find({email: user.email})) {
+        return res.status(403).json({message: "deactive" });
+    }
+
     if (!db.get('users').find({email: user.email, password: user.password}).value()) {
-        return res.status(200).send(" invalid email/password !! ");
+        return res.status(401).send(" invalid email/password !! ");
     } 
 
     const uname = db.get('users').find({email: user.email}).value().username;
@@ -462,140 +466,101 @@ app.post('/api/secure/login', (req, res, next) => {
 
 
 
-// CRUD schdule
-
-// add new schedule
-app.post('/schedules', (req, res) => {
+// admin login
+app.post('/api/admin/login', (req, res, next) => {
     if (!sanitize(JSON.stringify(req.body))) {
-        return res.status(403).send(" invalid data receiving ")
+        return res.status(403).send(" invalid data receiving ");
     }
-    const newName = req.body.name;
-
-    if (db.has(newName).value()) {
-        return res.status(404).send("already exist");
-    }
-    else {
-        db.set(newName, []).write();
-    }
-
-    return res.json(req.body);
-});
-
-
-app.post('/schedules/:name', (req, res) => {
-    const nm = req.params.name;
-    const subs = req.body.subject;
-    const codes = req.body.code;
-    if (!db.has(nm).value()) {
-        return res.status(404).send("schedule does not exist");
-    }
-    else {
-        db.set(nm, []).write();
-        for (i = 0; i < subs.length; i++) {
-            db.get(nm)
-              .push({
-                    subject: subs[i],
-                    code: codes[i]
-                })
-                 .write();
-        }
-        return res.json(req.body);
-    }
-    
-});
-
-
-// read schedule
-app.get('/schedules/:name', (req, res) => {
-    const nm = req.params.name;
-    if (!db.has(nm).value()) {
-        console.log("wrong");
-        return res.status(404).send(`no schedule named ${nm}`);
+    admin = req.body;
+    if (!db.get('admin').find({email: admin.email, password: admin.password}).value()) {
+        return res.status(404).send(" invalid admin email/password !! ");
     } 
-    else {
-        pairs =  db.get(nm).value();
-        return res.json(pairs);
-    }
+
+    const uname = db.get('admin').find({email: admin.email}).value();
+    //console.log(uname);
+    const token = jwt.sign({email: admin.email}, 'abcdefghijklmn', 
+                { expiresIn: '1h'}
+        );
+    
+    return res.status(200).json({
+        token: token,
+        expiresIn: 3600
+    });
+    
 });
 
 
-// make it easy, just reaplce all
-app.put('/schedules/:name', (req, res) => {
+// deactive user
+app.post('/api/admin/deactive', checkAuth, (req, res, next) => {
     
     if (!sanitize(JSON.stringify(req.body))) {
-        return res.status(403).send(" invalid data receiving ")
+        return res.status(403).json({message: " invalid data receiving "});
     }
-    const nm = req.params.name;
-    const subs= req.body.subject;
-    const codes = req.body.code;
     
-    if (!db.has(nm).value()) {
-        return res.status(404).send("schedule does not exist");
+    const email = req.body.email;
+    console.log(req.userData);
+    const adminEmail = req.userData.email;
+
+    if(!db.get('admin').find({email: adminEmail}).value()) {
+        return res.json({message: "no privilege"});
     }
-    else {
-        db.set(nm, []).write();
-        for (i = 0; i < subs.length; i++) {
-            db.get(nm)
-              .push({
-                    subject: subs[i],
-                    code: codes[i]
-                })
-                 .write();
+
+    const t = db.get('deactive').value();
+    for (i = 0; i < t.length; i++) {
+        if (t[i].email === email) {
+            return res.json({
+                message: "user is already deactived "
+            });
         }
-        return res.json(req.body);
-
-    }
-       
-        
-    
-});
-
-
-app.delete('/schedules/:name', (req, res) => {
-    const nm = req.params.name;
-    if (!db.has(nm)) {
-        return res.status(404).send(`no schedule named ${nm} found`);
-    }
-    else {
-        const obj = db.get(nm).value();
-        db.unset(nm).write();
-
-        return res.json(obj);
-        
     }
 
-});
+    db.get('deactive').push({
+        email: email
+    }).write();
+   
 
-
-app.get('/schedulelist', (req, res) => {
-    const classes = [];
-
-    const allSchedules = require('./db.json');
-
-    for (var sche in allSchedules) {
-        classes.push({
-            name: sche,
-            numberOfCourses: db.get(sche).size()
-
-        });
-    }
-    
-    return res.json(classes);
-});
-
-app.delete('/schedulelist', (req, res) => {
-    
-    const allSchedules = require('./db.json');
-
-    for (var sche in allSchedules) {
-        db.unset(sche).write();
-    }
-    
     return res.json({
-        delete: "success"
+        message:  email + " deactivated"
     });
+   
 
 });
+
+
+
+app.post('/api/admin/active', checkAuth, (req, res, next) => {
+    
+    if (!sanitize(JSON.stringify(req.body))) {
+        return res.status(403).json({message: " invalid data receiving "});
+    }
+    
+    const email = req.body.email;
+    const adminEmail = req.userData.email;
+
+    if(!db.get('admin').find({email: adminEmail}).value()) {
+        return res.json({message: "no privilege"});
+    }
+
+    const t = db.get('deactive').value();
+    for (i = 0; i < t.length; i++) {
+        if (t[i].email === email) {
+            t.splice(i,1);
+            db.write();
+            return res.json({
+                message: "user is actived "
+            });
+        }
+    }
+
+
+    return res.json({
+        message:  email + " activated"
+    });
+   
+
+});
+
+
 
 function sanitize(str) {
     try {

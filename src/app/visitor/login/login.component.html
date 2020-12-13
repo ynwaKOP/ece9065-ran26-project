@@ -13,11 +13,39 @@
         </mat-form-field>
         
         <button mat-raised-button 
-                color='accent'
-                type="submit">Login</button>
-    
+                color='primary'
+                type="submit">user Login</button>
+            
     </form>
+
+    <span class="spacer"></span>
     
 
 </mat-card>
 
+
+
+
+<mat-card>
+    
+    <form (submit)="adminLogin(adminLoginForm)" #adminLoginForm="ngForm">
+        <mat-form-field>
+            <input matInput  name="email" ngModel type="email" placeholder="Enter admin Email" #adminEmail="ngModel" required email>
+            <mat-error *ngIf="adminEmail.invalid"> Please enter a valid email </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field >
+            <input matInput name="password" ngModel type="password" placeholder="Enter admin password"  #adminPassword="ngModel" required>
+            <mat-error *ngIf="adminPassword.invalid"> Incorrect password </mat-error>
+        </mat-form-field>
+        
+        <button mat-raised-button 
+                color='warn'
+                type="submit">Admin Login</button>
+            
+    </form>
+
+
+    
+
+</mat-card>

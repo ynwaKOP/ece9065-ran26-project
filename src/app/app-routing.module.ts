@@ -2,6 +2,7 @@ import { Route } from '@angular/compiler/src/core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ListCreateComponent } from './lists/list-create.component';
+import { AdminComponent } from './visitor/login/admin.component';
 import { AuthGuard } from './visitor/login/auth.guard';
 import { LoginComponent } from './visitor/login/login.component';
 import { SignupComponent } from './visitor/login/signup.component';
@@ -13,6 +14,7 @@ const routes: Routes = [
     { path: 'user', component: ListCreateComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'signup', component: SignupComponent },
+    { path: 'admin', component: AdminComponent },
 
     //{ path: 'admin', component: AdminPageComponent },
     

@@ -11,15 +11,30 @@ export class LoginComponent {
 
     isLoading = false;
 
-
+    error: string;
+    
     constructor(public authService: AuthService) {}
 
     onLogin(form: NgForm) {
+        this.isLoading = true;
         if (form.invalid) {
             return;
         }
 
         this.authService.userLogin(form.value.email, form.value.password);
+        this.isLoading = false;
+        
+    }
+
+
+    adminLogin(form: NgForm) {
+        this.isLoading = true;
+        if (form.invalid) {
+            return;
+    }
+
+    this.authService.adminLogin(form.value.email, form.value.password);
+    this.isLoading = false;
         
     }
 }

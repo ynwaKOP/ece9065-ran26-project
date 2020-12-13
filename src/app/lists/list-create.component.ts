@@ -135,7 +135,7 @@ export class ListCreateComponent implements OnInit{
           if (form.invalid) {
             return;
         }
-        console.log(form.value.subject + form.value.code + listName);
+       
         this.listsService.addIntoList(form.value.subject, form.value.code, listName).subscribe();
         form.resetForm();
        

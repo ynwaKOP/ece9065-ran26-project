@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from "@angular/core";
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { AuthData } from './auth-data.model';
 
@@ -14,6 +15,15 @@ export class AuthService {
     private tokenTimer: any;
 
     private authStatusListener = new Subject<boolean>();
+
+
+    error: string;
+
+
+    private adminToken: string;
+    private adminTokenTimer: any;
+    private isAdminAuthenticated = false;
+    //private authStatusListener = new Subject<boolean>();
 
 
     constructor(private http:HttpClient,  private router: Router ) {}
@@ -44,6 +54,10 @@ export class AuthService {
         return this.isAuthenticated;
     }
 
+    getAdminIsAuth() {
+        return this.isAdminAuthenticated;
+    }
+
 
     userLogin(email: string, password: String) {
 
@@ -53,7 +67,7 @@ export class AuthService {
         };
 
         const url = "http://localhost:3000/api/secure/login"
-        this.http.post<{token: string, expiresIn: number}>(url, authData)
+        this.http.post<any>(url, authData)
             .subscribe(r => {
                 const token = r.token;
                 this.token = token;
@@ -67,10 +81,12 @@ export class AuthService {
                     this.saveAuthData(token, expirationDate);
                     this.router.navigate(['user']);
                 }
+                else {
+                    
+                }
                 
             });
 
-        console.log(url);
     }
 
 
@@ -138,6 +154,63 @@ export class AuthService {
     getToken() {
         return this.token;
     }
+
+
+
+
+    adminLogin(email: string, password: String) {
+
+        const authData: any = {
+            email: email,
+            password: password
+        };
+
+              
+        const url = "http://localhost:3000/api/admin/login"
+        this.http.post<{token: string, expiresIn: number}>(url, authData)
+            .subscribe(r => {
+                const token = r.token;
+                this.adminToken = token;
+                if (token) {
+                    const expiresInDuration = r.expiresIn;
+                    this.setAuthTimer(expiresInDuration);
+                    this.isAdminAuthenticated = true;
+                    this.authStatusListener.next(true);
+                    const now = new Date();
+                    const expirationDate = new Date(now.getTime() + expiresInDuration * 1000);
+                    this.saveAuthData(token, expirationDate);
+                    this.router.navigate(['/admin']);
+                }
+                else {
+                    catchError(this.handleError<any>('addIntoList', []));
+                }
+                
+            });  
+
+    }
+
+
+
+    adminLogout() {
+        this.adminToken = null;
+        this.isAdminAuthenticated = false;
+        this.authStatusListener.next(false);
+        clearTimeout(this.adminTokenTimer);
+        this.clearAuthData();
+        this.router.navigate(['']);
+    }
+
+
+    private handleError<T>(operation = 'operation', result?: T) {
+        return (error: any): Observable<T> => {
+      
+          // TODO: send the error to remote logging infrastructure
+          console.error(error); // log to console instead
+      
+          // Let the app keep running by returning an empty result.
+          return of(result as T);
+        };
+      }
    
 
 
