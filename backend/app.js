@@ -490,6 +490,52 @@ app.post('/api/admin/login', (req, res, next) => {
 });
 
 
+
+// get all active users   checkAuth,
+app.get('/api/admin/activeUsers', checkAuth,  (req, res, next) => {
+
+    //console.log(req.userData);
+    const adminEmail = req.userData.email;
+   
+    if(!db.get('admin').find({email: adminEmail}).value()) {
+        return res.json({message: "no privilege"});
+    }
+
+    const temp = db.get('users').value();
+    const de = db.get('deactive').value();
+    const users = [];
+    for (i = 0; i < temp.length; i++) {
+        if (!db.get('deactive').find({email: temp[i].email}).value()) {
+            users.push({
+                email: temp[i].email,
+                username: temp[i].username
+            });
+        }
+    }
+
+    return res.json(users);
+    
+});
+
+
+// get all deactives
+app.get('/api/admin/deactive', checkAuth, (req, res, next) => {
+
+    //console.log(req.userData);
+    const adminEmail = req.userData.email;
+
+    if(!db.get('admin').find({email: adminEmail}).value()) {
+        return res.json({message: "no privilege"});
+    }
+
+    const de = db.get('deactive').value();
+    
+    return res.json(de);
+    
+});
+
+
+
 // deactive user
 app.post('/api/admin/deactive', checkAuth, (req, res, next) => {
     
@@ -527,7 +573,7 @@ app.post('/api/admin/deactive', checkAuth, (req, res, next) => {
 });
 
 
-
+// activ user
 app.post('/api/admin/active', checkAuth, (req, res, next) => {
     
     if (!sanitize(JSON.stringify(req.body))) {

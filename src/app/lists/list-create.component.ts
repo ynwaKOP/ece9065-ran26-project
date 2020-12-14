@@ -25,6 +25,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 })
 export class ListCreateComponent implements OnInit{
 
+    isLoading = false;
     
     isPersonal: boolean = true;
 
@@ -52,14 +53,16 @@ export class ListCreateComponent implements OnInit{
 
 
     getMyOwnLists() {
-        
+        this.isLoading = true;
         this.listsService.getMyOwnLists()
             .subscribe(ls => this.myLists = ls);
         
+        this.isLoading = false;
     }
 
 
     onAddList(form: NgForm): void {
+        this.isLoading = true;
         if (form.invalid) {
             return;
         }
@@ -67,16 +70,19 @@ export class ListCreateComponent implements OnInit{
             c => this.myLists.push(c)
         );
         this.getMyOwnLists();
+        this.isLoading = false;
         form.resetForm();
         
     }
 
 
     deleteList(name: string) {
+        this.isLoading = true;
         this.listsService.removeList(name)
           .subscribe();
 
       this.getMyOwnLists();
+      this.isLoading = false;
     }
 
 
@@ -105,6 +111,7 @@ export class ListCreateComponent implements OnInit{
    
       // select a list
      mySelectedList(list: List){
+         this.isLoading = true;
         this.courses = [];
         this.selectedList = list;
         this.info = this.selectedList.classes;
@@ -115,14 +122,17 @@ export class ListCreateComponent implements OnInit{
                 .subscribe(c => collect.push(c));
           }
           
-          this.courses = collect;          
+          this.courses = collect;     
+          
+          this.isLoading = false;
           
       }
 
 
     removeFromList(subject: string, code: string, listName: string) {
+        this.isLoading = true;
         this.listsService.removeFromList(subject, code, listName);
-        
+        this.isLoading = false;
     }
 
 

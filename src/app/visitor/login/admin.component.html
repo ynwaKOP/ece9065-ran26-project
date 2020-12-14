@@ -27,4 +27,44 @@
             type="submit">Deactive this user </button>
 
   </form>
+
+
+  <hr> <hr>
   
+
+<div class="act">
+  <h2>Active Users</h2>
+
+  <mat-card *ngFor="let a of activeUsers">
+    <ul>
+      <li>
+       Email:  {{ a.email }}  ------ Username: {{ a.username }}
+      </li>
+
+    </ul>
+
+
+
+  </mat-card>
+
+
+</div>
+ 
+
+
+
+<div class='deact'>
+  <h2>Dective Users</h2>
+
+  <mat-card *ngFor="let d of deactives">
+    <ul>
+      <li>
+       Email:  {{ d.email }} 
+      </li>
+
+    </ul>
+
+  </mat-card>
+
+
+</div>

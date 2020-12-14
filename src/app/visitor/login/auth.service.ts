@@ -37,7 +37,7 @@ export class AuthService {
         };
 
         const url = "http://localhost:3000/api/signup"
-        this.http.post(url, authData)
+        return this.http.post(url, authData)
             .subscribe(r => {
                 console.log(r);
                 this.router.navigate(['/login']);
@@ -67,7 +67,7 @@ export class AuthService {
         };
 
         const url = "http://localhost:3000/api/secure/login"
-        this.http.post<any>(url, authData)
+        return this.http.post<any>(url, authData)
             .subscribe(r => {
                 const token = r.token;
                 this.token = token;

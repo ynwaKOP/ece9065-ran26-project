@@ -5,7 +5,6 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
 
-
 @Injectable({providedIn: 'root'})
 
 export class AdminService implements OnInit{
@@ -20,11 +19,20 @@ export class AdminService implements OnInit{
 
     ngOnInit() {
 
+
     }
 
     getActiveUser() {
-
+        const url = "http://localhost:3000/api/admin/activeUsers";
+        return this.http.get<any>(url).pipe();
     }
+
+
+    getDeactive() {
+        const url = "http://localhost:3000/api/admin/deactive";
+        return this.http.get<any>(url).pipe();
+    }
+
 
 
     activeUser(email: string) {
@@ -35,7 +43,7 @@ export class AdminService implements OnInit{
 
         const url = "http://localhost:3000/api/admin/active";
 
-        this.http.post<any>(url, info)
+        return this.http.post<any>(url, info)
         .subscribe();
         
     }
@@ -49,7 +57,7 @@ export class AdminService implements OnInit{
         }
         const url = "http://localhost:3000/api/admin/deactive";
         console.log(info);
-        this.http.post<any>(url, info)
+        return this.http.post<any>(url, info)
                 .subscribe();
 
     }
