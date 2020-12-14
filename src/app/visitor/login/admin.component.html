@@ -1,6 +1,6 @@
 <h2>Admin Page</h2>
 
-
+<mat-spinner *ngIf="isLoading"> </mat-spinner>
 
 <form (submit)="active(activeForm)" #activeForm="ngForm">
     <mat-form-field>
@@ -16,7 +16,7 @@
 <br><br><br><br>
 
  
-
+<mat-spinner *ngIf="isLoading"> </mat-spinner>
   <form (submit)="deActive(deForm)" #deForm="ngForm">
     <mat-form-field>
         <input matInput type="email" name="deemail" placeholder="Enter user email to deactive" ngModel required #deactiveEmail="ngModel">

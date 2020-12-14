@@ -17,7 +17,7 @@ export class AuthService {
     private authStatusListener = new Subject<boolean>();
 
 
-    error: string;
+    error: any;
 
 
     private adminToken: string;
@@ -70,7 +70,9 @@ export class AuthService {
         return this.http.post<any>(url, authData)
             .subscribe(r => {
                 const token = r.token;
+                const m = r.message;
                 this.token = token;
+                this.error = m;
                 if (token) {
                     const expiresInDuration = r.expiresIn;
                     this.setAuthTimer(expiresInDuration);
@@ -81,15 +83,15 @@ export class AuthService {
                     this.saveAuthData(token, expirationDate);
                     this.router.navigate(['user']);
                 }
-                else {
-                    
-                }
                 
             });
 
     }
 
-
+    getLogInError() {
+            return this.error;
+       
+    }
 
     autoAuthUser() {
         const authInformation = this.getAuthData();
@@ -206,6 +208,7 @@ export class AuthService {
       
           // TODO: send the error to remote logging infrastructure
           console.error(error); // log to console instead
+        
       
           // Let the app keep running by returning an empty result.
           return of(result as T);
