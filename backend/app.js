@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const checkAuth = require("./check-auth");
 const bodyParser = require('body-parser');
 
+const path = require('path');
+
 const app = express();
 
 app.use((req,res,next) => {
@@ -22,6 +24,13 @@ app.use((req,res,next) => {
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(bodyParser.json());
+
+
+app.use(express.static(path.join(__dirname, 'dist/ece9065-ran26-project')));
+
+app.get('*', (req,res) => {
+    res.sendFile(path.join(__dirname,'../dist/ece9065-ran26-project/index.html'));
+    });
 
 
 const PORT = 3000;

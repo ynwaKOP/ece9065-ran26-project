@@ -12,7 +12,7 @@ import { catchError, map} from 'rxjs/operators';
 export class CourseService {
 
     //private coursesUrl = "/api/open/courses/"
-    private coursesUrl = 'http://localhost:3000/api/open/courses/'
+    private coursesUrl = '/api/open/courses/'
 
     ///api/open/courses/:subject/:code
     httpOptions = {
@@ -30,7 +30,7 @@ export class CourseService {
             return of();
         }
       
-        const url = 'http://localhost:3000/api/open/courses/' + subject + '/' + code;
+        const url = '/api/open/courses/' + subject + '/' + code;
         console.log(url);
         return this.http.get<Course>(url).pipe(
             catchError(this.handleError<Course>('searchSubCode'))
@@ -44,7 +44,7 @@ export class CourseService {
           return of([]);
       }
     
-      const url = 'http://localhost:3000/api/open/keyword/' + keyword;
+      const url = '/api/open/keyword/' + keyword;
       console.log(url);
       return this.http.get<Course[]>(url).pipe(
           catchError(this.handleError<Course[]>('searchKeyword'))
