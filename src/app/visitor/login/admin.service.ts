@@ -23,13 +23,13 @@ export class AdminService implements OnInit{
     }
 
     getActiveUser() {
-        const url = "http://localhost:3000/api/admin/activeUsers";
+        const url = "/api/admin/activeUsers";
         return this.http.get<any>(url).pipe();
     }
 
 
     getDeactive() {
-        const url = "http://localhost:3000/api/admin/deactive";
+        const url = "/api/admin/deactive";
         return this.http.get<any>(url).pipe();
     }
 
